@@ -6,7 +6,7 @@ A single-file, browser-based, P2P multiplayer party game inspired by Cards Again
 
 > ⚠️ **18+ Content Warning:** This game contains unfiltered, adult Malaysian slang and humor. Not for the faint of hati.
 >
-> ⚠️BET IS OUT STILL BUGGY V2 WILL BE OUT SOON 
+> ⚠️BETA IS OUT STILL BUGGY V2 WILL BE OUT SOON 
 
 ## Screenshots
 
