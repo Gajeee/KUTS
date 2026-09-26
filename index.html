@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KAD UNTUK TAK SIKAT | Cards Against Humanity Malaysian Edition</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PeerJS for WebRTC P2P Multiplayer -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <!-- FontAwesome for UI Icons (Strictly No Emojis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
+
+        :root {
+            --color-game-night-black: #000000;
+            --color-card-white: #ffffff;
+            --color-signal-red: #fe2f2f;
+            --color-royal-violet: #7333f1;
+            --color-antique-gold: #d7b73b;
+            --color-lemon-card: #fffe5b;
+            --color-lavender-card: #ede5ff;
+            --color-cobalt-card: #1b5bff;
+            --color-sky-card: #a0e9ff;
+            --color-bubblegum-card: #ffa0f0;
+            --color-mint-card: #b4ff91;
+            --color-tangerine-card: #ff9559;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--color-game-night-black);
+            color: var(--color-card-white);
+            font-family: var(--font-main);
+            font-weight: 800;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* CAH Design System Buttons */
+        .pill-btn {
+            border-radius: 38px;
+            box-shadow: inset 0 0 0 2px var(--btn-border-color, #ffffff);
+            font-weight: 800;
+            transition: all 0.15s ease-in-out;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pill-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            filter: brightness(1.25);
+        }
+
+        .pill-btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .pill-btn-red { --btn-border-color: var(--color-signal-red); color: #ffffff; }
+        .pill-btn-violet { --btn-border-color: var(--color-royal-violet); color: #ffffff; }
+        .pill-btn-gold { --btn-border-color: var(--color-antique-gold); color: #ffffff; }
+        .pill-btn-white { --btn-border-color: #ffffff; color: #ffffff; }
+
+        /* Physical Card Geometry & Styling */
+        .cah-card {
+            border-radius: 13px;
+            padding: 1.25rem;
+            min-height: 185px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .cah-card-white {
+            background-color: var(--color-card-white);
+            color: #000000;
+            box-shadow: inset 0 0 0 2px #000000, 0 8px 18px rgba(0,0,0,0.6);
+        }
+
+        .cah-card-black {
+            background-color: #000000;
+            color: #ffffff;
+            box-shadow: inset 0 0 0 2px #ffffff, 0 8px 18px rgba(0,0,0,0.9);
+        }
+
+        /* Easter Egg Gold Card Styling */
+        .cah-card-easteregg {
+            background-color: #fffdf0;
+            color: #000000;
+            box-shadow: inset 0 0 0 3px var(--color-antique-gold), 0 0 20px rgba(215, 183, 59, 0.6);
+        }
+
+        .card-red-border { box-shadow: inset 0 0 0 3px var(--color-signal-red), 0 8px 16px rgba(0,0,0,0.5); }
+        .card-violet-border { box-shadow: inset 0 0 0 3px var(--color-royal-violet), 0 8px 16px rgba(0,0,0,0.5); }
+        .card-gold-border { box-shadow: inset 0 0 0 3px var(--color-antique-gold), 0 8px 16px rgba(0,0,0,0.5); }
+
+        .cah-card.selected {
+            transform: translateY(-12px) scale(1.04) !important;
+            box-shadow: inset 0 0 0 4px var(--color-signal-red), 0 14px 28px rgba(254,47,47,0.5) !important;
+        }
+
+        /* Premium Physical Background Playing Cards */
+        .bg-scatter-card {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 14px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            box-shadow: inset 0 0 0 3px #000000, 0 15px 35px rgba(0, 0, 0, 0.85);
+            animation: floatDrift 20s infinite ease-in-out alternate;
+            opacity: 0.35;
+        }
+
+        .bg-card-red { border: 3px solid var(--color-signal-red); box-shadow: inset 0 0 0 2px var(--color-signal-red), 0 18px 40px rgba(0,0,0,0.9); }
+        .bg-card-violet { border: 3px solid var(--color-royal-violet); box-shadow: inset 0 0 0 2px var(--color-royal-violet), 0 18px 40px rgba(0,0,0,0.9); }
+        .bg-card-gold { border: 3px solid var(--color-antique-gold); box-shadow: inset 0 0 0 2px var(--color-antique-gold), 0 18px 40px rgba(0,0,0,0.9); }
+
+        @keyframes floatDrift {
+            0% {
+                transform: translate(0px, 0px) rotate(var(--rot-start, -10deg));
+            }
+            50% {
+                transform: translate(35px, -30px) rotate(var(--rot-mid, 12deg));
+            }
+            100% {
+                transform: translate(-20px, 25px) rotate(var(--rot-end, -5deg));
+            }
+        }
+
+        ::-webkit-scrollbar { height: 6px; width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative bg-black text-white font-extrabold overflow-x-hidden">
+
+    <div id="bg-scatter" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <!-- Top Left Card -->
+        <div class="bg-scatter-card bg-card-red w-44 h-64 bg-[var(--color-lemon-card)] top-[3%] left-[2%]" style="--rot-start:-15deg; --rot-mid:8deg; --rot-end:-12deg; animation-duration:22s;">
+            <div>KAD UNTUK TAK SIKAT</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">MALAYSIAN EDITION</div>
+        </div>
+
+        <!-- Top Right Card -->
+        <div class="bg-scatter-card bg-card-violet w-48 h-68 bg-[var(--color-sky-card)] top-[12%] right-[3%]" style="--rot-start:18deg; --rot-mid:-10deg; --rot-end:15deg; animation-duration:26s; animation-delay:-4s;">
+            <div>ROTI CANAI BANJIR KARI AYAM</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">SAMBAL ASING</div>
+        </div>
+
+        <!-- Middle Left Card -->
+        <div class="bg-scatter-card bg-card-gold w-40 h-58 bg-[var(--color-bubblegum-card)] top-[40%] left-[5%]" style="--rot-start:-22deg; --rot-mid:5deg; --rot-end:-18deg; animation-duration:24s; animation-delay:-8s;">
+            <div>MAK KAU HIJAU!</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">CLASSIC SLANG</div>
+        </div>
+
+        <!-- Middle Right Card -->
+        <div class="bg-scatter-card bg-card-red w-44 h-60 bg-[var(--color-mint-card)] top-[50%] right-[6%]" style="--rot-start:12deg; --rot-mid:-16deg; --rot-end:8deg; animation-duration:28s; animation-delay:-3s;">
+            <div>PUNDE DEY!</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">UNFILTERED</div>
+        </div>
+
+        <!-- Bottom Left Card -->
+        <div class="bg-scatter-card bg-card-violet w-48 h-64 bg-[var(--color-lavender-card)] bottom-[5%] left-[8%]" style="--rot-start:-8deg; --rot-mid:14deg; --rot-end:-6deg; animation-duration:20s; animation-delay:-12s;">
+            <div>MYVI KING OF ROAD</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">HIGHWAY HERO</div>
+        </div>
+
+        <!-- Bottom Right Card -->
+        <div class="bg-scatter-card bg-card-gold w-40 h-56 bg-[var(--color-tangerine-card)] bottom-[8%] right-[12%]" style="--rot-start:20deg; --rot-mid:-12deg; --rot-end:18deg; animation-duration:25s; animation-delay:-7s;">
+            <div>CIBAI LA BRO</div>
+            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">K UTS</div>
+        </div>
+    </div>
+
+    <header class="relative z-10 px-4 py-4 md:px-8 border-b border-zinc-800 flex justify-between items-center bg-black/90 backdrop-blur-md">
+        <div class="flex items-center space-x-3">
+            <div class="bg-white text-black px-3 py-1 rounded-lg text-lg md:text-xl font-black tracking-tighter shadow-md">
+                KUTS
+            </div>
+            <div>
+                <h1 class="text-base md:text-xl font-black tracking-tight leading-none text-white uppercase">
+                    Kad Untuk Tak Sikat
+                </h1>
+                <p class="text-xs text-zinc-400 font-normal">Unfiltered Malaysian CAH</p>
+            </div>
+        </div>
+
+        <div>
+            <a href="https://gajeee.github.io/Portfolio/" target="_blank" class="text-xs text-zinc-300 hover:text-white underline font-bold transition-colors">
+                <span class="text-yellow-400 font-black">Gajee</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="relative z-10 flex-grow flex flex-col justify-center items-center px-4 py-6 max-w-6xl mx-auto w-full">
+
+        <!-- LOBBY / LANDING VIEW -->
+        <div id="view-lobby" class="w-full max-w-xl mx-auto space-y-6 text-center">
+            
+            <div class="space-y-3">
+                <div class="inline-block px-4 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-red-600 via-purple-600 to-yellow-500 text-white uppercase tracking-widest shadow-lg">
+                    18+ Unfiltered Manglish & Malaysian Slang
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black tracking-tight leading-none text-white uppercase">
+                    Cards Against Humanity
+                </h2>
+                <p class="text-xs md:text-sm text-zinc-400 font-normal max-w-md mx-auto">
+                    The party game for terrible Malaysians. Connect with friends across phones, tablets & laptops over Wi-Fi or play local Pass & Play / AI mode!
+                </p>
+            </div>
+
+            <!-- Player Setup Form -->
+            <div class="bg-zinc-900/90 border-2 border-zinc-800 rounded-2xl p-5 text-left space-y-4 shadow-2xl">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-zinc-400 mb-1">Your Nickname</label>
+                    <input type="text" id="player-nickname" class="w-full bg-black border-2 border-zinc-700 rounded-full px-4 py-2.5 text-white font-bold focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="e.g. Abang Long Myvi, Kakak Nasi Lemak..." maxlength="18">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <!-- Host Multiplayer -->
+                    <button onclick="createHostLobby()" class="pill-btn pill-btn-red py-3 px-3 text-center font-black text-xs sm:text-sm flex flex-col items-center justify-center space-y-1">
+                        <i class="fas fa-network-wired text-base mb-1"></i>
+                        <span>HOST ROOM</span>
+                    </button>
+
+                    <!-- Join Room -->
+                    <button onclick="showJoinModal()" class="pill-btn pill-btn-violet py-3 px-3 text-center font-black text-xs sm:text-sm flex flex-col items-center justify-center space-y-1">
+                        <i class="fas fa-key text-base mb-1"></i>
+                        <span>JOIN ROOM</span>
+                    </button>
+
+                    <!-- Pass & Play -->
+                    <button onclick="startPassAndPlay()" class="pill-btn pill-btn-gold py-3 px-3 text-center font-black text-xs sm:text-sm flex flex-col items-center justify-center space-y-1">
+                        <i class="fas fa-users text-base mb-1"></i>
+                        <span>PASS & PLAY</span>
+                    </button>
+                </div>
+
+                <div class="pt-1 text-center">
+                    <button onclick="startAIGame()" class="text-xs text-yellow-400 hover:underline font-bold">
+                        <i class="fas fa-robot mr-1"></i> Or play Solo instantly vs Malaysian AI Bots
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Rules Card -->
+            <div class="cah-card cah-card-white text-left text-xs space-y-2 card-gold-border">
+                <div class="flex justify-between items-center border-b-2 border-black pb-2">
+                    <span class="font-black text-sm uppercase">Cara Main / How To Play</span>
+                    <i class="fas fa-fire text-red-600"></i>
+                </div>
+                <ol class="list-decimal list-inside space-y-1.5 font-semibold text-zinc-800">
+                    <li>One player becomes the <b>Card Czar</b> each round.</li>
+                    <li>The Czar reveals 1 Black Question Card.</li>
+                    <li>Everyone else submits 1 White Answer Card from their hand.</li>
+                    <li>The Czar picks the funniest answer. Winner earns 1 point!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ROOM LOBBY VIEW -->
+        <div id="view-room" class="w-full max-w-2xl mx-auto space-y-6 hidden">
+            <div class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 text-center space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-zinc-800 pb-4">
+                    <div class="text-left">
+                        <span class="text-xs uppercase text-zinc-400 tracking-wider">Room Code</span>
+                        <div class="flex items-center space-x-2">
+                            <span id="room-code-display" class="text-3xl font-black text-yellow-400 tracking-widest">----</span>
+                            <button onclick="copyRoomCode()" class="text-xs bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-full text-white">
+                                <i class="fas fa-copy mr-1"></i> COPY
+                            </button>
+                        </div>
+                    </div>
+                    <div id="host-badge" class="px-3 py-1 bg-red-900/60 border border-red-500 rounded-full text-xs text-red-200 uppercase">
+                        Host Active
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-sm text-zinc-300 font-bold uppercase tracking-wider">Players Joined (<span id="player-count">0</span>):</h3>
+                        <div class="inline-flex items-center gap-2 rounded-full pl-3 pr-2 py-1.5" style="box-shadow: inset 0 0 0 2px var(--color-antique-gold);">
+                            <span class="text-[10px] text-zinc-400 uppercase tracking-wider font-black">Target</span>
+                            <div class="relative flex items-center">
+                                <select id="target-score-select" onchange="updateTargetScore(this.value)" class="appearance-none bg-transparent text-yellow-400 text-xs font-black uppercase pr-4 py-0.5 focus:outline-none cursor-pointer">
+                                    <option class="bg-zinc-900 text-white" value="5">5 Pts</option>
+                                    <option class="bg-zinc-900 text-white" value="8" selected>8 Pts</option>
+                                    <option class="bg-zinc-900 text-white" value="12">12 Pts</option>
+                                    <option class="bg-zinc-900 text-white" value="999">Endless</option>
+                                </select>
+                                <i class="fas fa-chevron-down text-yellow-400 text-[9px] absolute right-0 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="players-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-left">
+                        <!-- Connected player badges -->
+                    </div>
+                </div>
+
+                <div class="pt-4 flex flex-col sm:flex-row gap-3">
+                    <button id="add-bot-btn" onclick="addBotToRoom()" class="pill-btn pill-btn-gold py-3 px-6 flex-1 text-xs">
+                        + ADD AI BOT
+                    </button>
+                    <button id="start-game-btn" onclick="startMultiplayerGame()" class="pill-btn pill-btn-red py-3 px-6 flex-1 text-xs hidden">
+                        START GAME <i class="fas fa-play ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN GAMEPLAY VIEW -->
+        <div id="view-game" class="w-full space-y-6 hidden">
+            
+            <!-- Pass & Play Shield Banner -->
+            <div id="pass-shield-modal" class="fixed inset-0 bg-black/95 z-40 flex flex-col justify-center items-center p-6 text-center space-y-4 hidden">
+                <i class="fas fa-hand-holding-hand text-yellow-400 text-5xl mb-2"></i>
+                <h3 class="text-2xl sm:text-3xl font-black text-white uppercase">Pass The Phone / Device</h3>
+                <p id="pass-shield-text" class="text-sm text-zinc-300 max-w-sm">Hand the device to player to view their cards.</p>
+                <button onclick="dismissPassShield()" class="pill-btn pill-btn-gold px-8 py-3 text-xs">I AM READY</button>
+            </div>
+
+            <!-- Top Status Dashboard -->
+            <div class="flex flex-wrap justify-between items-center bg-zinc-900/90 border border-zinc-800 rounded-xl p-3 text-xs md:text-sm gap-2">
+                <div class="flex items-center space-x-3">
+                    <span class="text-zinc-400 uppercase">Round: <strong id="round-num" class="text-white">1</strong></span>
+                    <span class="text-zinc-600">|</span>
+                    <span class="text-zinc-400 uppercase">Czar: <strong id="czar-name" class="text-yellow-400">...</strong></span>
+                </div>
+                <div id="game-status-msg" class="bg-red-600/30 text-red-300 border border-red-500 px-3 py-1 rounded-full text-xs uppercase font-bold">
+                    Choose your funniest card!
+                </div>
+            </div>
+
+            <!-- Black Question Card Banner -->
+            <div class="flex justify-center items-center py-2">
+                <div id="black-card" class="cah-card cah-card-black w-full max-w-lg min-h-[200px] text-lg sm:text-2xl font-black leading-snug border-2 border-white">
+                    <div id="black-card-text" class="mb-6">
+                        Loading question card...
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-zinc-400 border-t border-zinc-800 pt-2 uppercase">
+                        <span>Kad Hitam</span>
+                        <span>Pick 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Czar Submissions Judging Grid -->
+            <div id="czar-judging-area" class="space-y-3 hidden">
+                <h3 class="text-center text-xs sm:text-sm text-yellow-400 font-black uppercase tracking-wider">
+                    <i class="fas fa-gavel mr-1"></i> Card Czar judging submitted cards:
+                </h3>
+                <div id="submitted-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Cards submitted appear here -->
+                </div>
+            </div>
+
+            <!-- Player's Hand Area -->
+            <div id="player-hand-area" class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs text-zinc-400 uppercase tracking-wider"><span id="hand-player-label">Your</span> Hand Cards (Pick 1):</h3>
+                    <button id="submit-card-btn" onclick="submitSelectedCard()" disabled class="pill-btn pill-btn-red px-5 py-1.5 text-xs disabled:opacity-30 disabled:cursor-not-allowed">
+                        SUBMIT CARD
+                    </button>
+                </div>
+                
+                <div id="hand-cards-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                    <!-- Player hand cards -->
+                </div>
+            </div>
+
+            <!-- Scoreboard -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-2">
+                <div class="text-xs uppercase tracking-wider text-zinc-400 flex justify-between items-center">
+                    <span>Malaysian Leaderboard</span>
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                </div>
+                <div id="scoreboard-list" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <!-- Scores -->
+                </div>
+            </div>
+        </div>
+
+        <!-- JOIN MODAL -->
+        <div id="modal-join" class="fixed inset-0 bg-black/85 backdrop-blur-md flex justify-center items-center p-4 z-50 hidden">
+            <div class="bg-zinc-900 border-2 border-zinc-700 rounded-2xl p-6 max-w-md w-full space-y-4 text-left">
+                <h3 class="text-xl font-black text-white uppercase">Join Game Room</h3>
+                <p class="text-xs text-zinc-400">Enter the 4-letter Room Code given by the Host.</p>
+                
+                <div>
+                    <label class="block text-xs uppercase text-zinc-400 mb-1">Room Code</label>
+                    <input type="text" id="join-code-input" class="w-full bg-black border-2 border-zinc-700 rounded-full px-4 py-2.5 text-white font-black tracking-widest text-lg uppercase focus:outline-none focus:border-purple-500" placeholder="e.g. KUTS" maxlength="5">
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button onclick="closeJoinModal()" class="pill-btn pill-btn-white flex-1 py-2.5 text-xs">CANCEL</button>
+                    <button onclick="connectToHost()" class="pill-btn pill-btn-violet flex-1 py-2.5 text-xs">JOIN NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROUND WINNER MODAL -->
+        <div id="modal-round-winner" class="fixed inset-0 bg-black/90 flex justify-center items-center p-4 z-50 hidden">
+            <div class="bg-zinc-900 border-2 border-yellow-500 rounded-2xl p-6 max-w-lg w-full text-center space-y-4">
+                <div class="text-yellow-400 text-2xl sm:text-4xl font-black uppercase tracking-tight flex items-center justify-center space-x-2">
+                    <i class="fas fa-crown text-yellow-400"></i>
+                    <span id="winner-title-text">ROUND WINNER!</span>
+                </div>
+                <p id="winner-announcement-text" class="text-base text-white font-bold"></p>
+                
+                <div class="p-4 bg-black rounded-xl border border-zinc-800 text-left space-y-2">
+                    <p id="winning-question" class="text-xs text-zinc-400 font-medium"></p>
+                    <p id="winning-answer" class="text-lg text-yellow-300 font-black"></p>
+                </div>
+
+                <button onclick="nextRound()" id="next-round-btn" class="pill-btn pill-btn-gold px-8 py-3 text-xs w-full">
+                    NEXT ROUND <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="relative z-10 py-4 text-center text-xs text-zinc-500 border-t border-zinc-900 bg-black">
+        <p>Cards Against Humanity: Malaysian Slang Edition</p>
+        <p class="mt-1"><a href="https://gajeee.github.io/Portfolio/" target="_blank" class="text-yellow-400 hover:underline font-bold">Made by Gajee Hub</a></p>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           1. MALAYSIAN CARD DATABASE (ENGLISH, MANGLISH, MALAY & 18+ SLANG)
+           ========================================================================== */
+        const BLACK_CARDS = [
+            "Why did the white Myvi flying over the roundabout yesterday? ____.",
+            "Boss at Mamak order: 'Teh Tarik Kurang Manis, and add ____.'",
+            "What did JPJ find inside the Rempit motor seat during 3 AM roadblock? ____.",
+            "The secret illegal ingredient in Ramly Burger Special is ____.",
+            "Main reason why my member don't want to pay back RM50 loan: ____.",
+            "What broke up the 5-year relationship at Pavilion KL? ____.",
+            "When Mak Kau Hijau gets extremely angry, she shouts ____!",
+            "During Bantuan Tunai Rahmah payout, uncle immediately went to buy ____.",
+            "The most dangerous thing when driving on PLUS highway at night: ____.",
+            "Why did the WeChat kid get penampar from his bapak? ____.",
+            "When Malaysian say 'Wey cibai!', it actually means ____.",
+            "Two essential things inside every office pantry in KL: Nescafe and ____.",
+            "When bapak sees electricity bill RM600, he screams ____!",
+            "Why is Jalan Tun Razak jammed for 4 hours today? ____.",
+            "What is the real reason why the Tomyam shop closed for 1 month? ____.",
+            "What is Uncle Muthu hiding under his sari-sari stall? ____.",
+            "If Malaysia conquered the world, our national anthem would be ____.",
+            "The secret to passing JPJ driving test on first try: ____.",
+            "What made the police officer decline the RM50 kopi money? ____.",
+            "In 2030, Bank Negara will replace Ringgit Malaysia currency with ____.",
+            "Why is the LRT suddenly stopped in the middle of track again? ____.",
+            "The main cause of gaduh at Pasar Malam Klang: ____.",
+            "What is inside Ah Beng's modified Honda Civic bonnet? ____."
+        ];
+
+        const WHITE_CARDS = [
+            // EASTER EGG SPECIAL CARD
+            "roti canai 2 potong banjir kari ayam sambal asing - gajee",
+            
+            // 18+ & Spicy Malaysian Slang
+            "PUNDE!",
+            "CIBAI!",
+            "LANCAU!",
+            "LAN JIAO!",
+            "SOHAI!",
+            "CIBAI KIA!",
+            "Mak kau hijau!",
+            "Kepala otak kau!",
+            "Bodoh nak mampus.",
+            "Kepala bana dia.",
+            "Pokai sampai makan Maggi kering.",
+            "Otak udang tak ada lesen.",
+
+            // English & Manglish Classic Humor
+            "Myvi King of the Road going 190km/h on emergency lane.",
+            "Mamak ikat tepi tak nak gula but still sweet as hell.",
+            "Rempit doing Superman style on DUKE highway.",
+            "Shopee delivery guy casually knocking off side mirrors.",
+            "Nasi Lemak RM1.50 with extra crispy paru.",
+            "Smuggling subsidised cooking oil packets to Thailand.",
+            "Drinking Ketum with warm water at 2 AM.",
+            "Durian Musang King prices causing bankruptcy.",
+            "Mee Goreng Basah that is somehow dry as bone.",
+            "Kopi Ais ikat tepi leaking all over new shirt.",
+            "Friend borrowing RM100 then posting IG Story partying in Bali.",
+            "Polis Trafik asking for 'duit kopi extra'.",
+            "Signalling right but turning left sharply.",
+            "Factory bus with total brake failure.",
+            "Crying over overpriced Sambal Sotong at Nasi Kandar.",
+            "Cina, Melayu, and India fighting for 1 parking spot at Pasar Malam.",
+            "Maggi Goreng Double Tambah Telur Mata Gedik.",
+            "Discipline teacher with 1-meter wooden ruler.",
+            "Saman ekor arriving in mail 6 months late.",
+            "Roti Canai so crispy it explodes into dust.",
+            "Rich uncle in Alphard cutting Q near toll plaza.",
+            "Smell of 2T motor oil in the morning.",
+            "Ayam Goreng McD pedas gila sampai menangis.",
+            "Macau Syndicate scammer pretending to be LHDN officer.",
+            "Stealing helmet from parked EX5 motor.",
+            "Ghosting after first date at Bubble Tea shop.",
+            "Bragging about 0.5% dividend from ASB.",
+            "Driving with high beam on bright sunny afternoon.",
+            "Tiktok influencer blocking traffic for dance video.",
+            "Stuck in jam near Genting Highlands cable car.",
+            "Eating Durian with bare hands inside aircond room.",
+            "Malu Apa Bossku mentality."
+        ];
+
+        /* ==========================================================================
+           2. GAME STATE MANAGEMENT
+           ========================================================================== */
+        let player = {
+            id: '',
+            name: '',
+            score: 0,
+            hand: [],
+            isHost: false,
+            isCzar: false
+        };
+
+        let roomCode = '';
+        let peer = null;
+        let connections = {}; 
+        let hostConn = null;
+
+        let gameState = {
+            players: [],
+            czarIndex: 0,
+            blackCard: '',
+            submittedCards: [],
+            phase: 'SUBMITTING', // SUBMITTING -> JUDGING -> ANNOUNCING
+            round: 1,
+            targetScore: 8,
+            mode: 'MULTIPLAYER', // MULTIPLAYER, PASSANDPLAY, or SOLO
+            passCurrentPlayerIdx: 0
+        };
+
+        let selectedCard = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            player.id = 'p_' + Math.random().toString(36).substring(2, 7);
+            document.getElementById('player-nickname').value = 'Player_' + player.id.substring(2, 5);
+        });
+
+        /* ==========================================================================
+           3. NETWORKING & LOBBY LOGIC
+           ========================================================================== */
+        function getPlayerName() {
+            const input = document.getElementById('player-nickname').value.trim();
+            return input || 'Malaysian_' + player.id.substring(2, 5);
+        }
+
+        function createHostLobby() {
+            player.name = getPlayerName();
+            player.isHost = true;
+            gameState.mode = 'MULTIPLAYER';
+            roomCode = 'KUTS' + Math.floor(10 + Math.random() * 89);
+
+            peer = new Peer(roomCode);
+
+            peer.on('open', (id) => {
+                showView('view-room');
+                document.getElementById('room-code-display').innerText = id;
+                document.getElementById('start-game-btn').classList.remove('hidden');
+
+                gameState.players = [{
+                    id: player.id,
+                    name: player.name,
+                    score: 0,
+                    isBot: false,
+                    isCzar: false,
+                    hand: []
+                }];
+                updateLobbyUI();
+            });
+
+            peer.on('connection', (conn) => {
+                conn.on('data', (data) => handleHostReceiveData(conn, data));
+            });
+
+            peer.on('error', () => {
+                alert('Room code busy. Please try hosting again!');
+            });
+        }
+
+        function showJoinModal() {
+            document.getElementById('modal-join').classList.remove('hidden');
+        }
+
+        function closeJoinModal() {
+            document.getElementById('modal-join').classList.add('hidden');
+        }
+
+        function connectToHost() {
+            player.name = getPlayerName();
+            player.isHost = false;
+            gameState.mode = 'MULTIPLAYER';
+
+            const targetCode = document.getElementById('join-code-input').value.trim().toUpperCase();
+            if (!targetCode) return;
+
+            peer = new Peer();
+
+            peer.on('open', () => {
+                hostConn = peer.connect(targetCode);
+
+                hostConn.on('open', () => {
+                    closeJoinModal();
+                    showView('view-room');
+                    document.getElementById('room-code-display').innerText = targetCode;
+                    document.getElementById('host-badge').innerText = 'CLIENT CONNECTED';
+                    document.getElementById('add-bot-btn').classList.add('hidden');
+
+                    hostConn.send({
+                        type: 'JOIN',
+                        player: { id: player.id, name: player.name }
+                    });
+                });
+
+                hostConn.on('data', (data) => handleClientReceiveData(data));
+
+                hostConn.on('error', () => {
+                    alert('Could not connect to room code!');
+                });
+            });
+        }
+
+        function handleHostReceiveData(conn, data) {
+            if (data.type === 'JOIN') {
+                connections[data.player.id] = conn;
+                gameState.players.push({
+                    id: data.player.id,
+                    name: data.player.name,
+                    score: 0,
+                    isBot: false,
+                    isCzar: false,
+                    hand: []
+                });
+                broadcastGameState();
+                updateLobbyUI();
+            } else if (data.type === 'SUBMIT_CARD') {
+                gameState.submittedCards.push({
+                    playerId: data.playerId,
+                    cardText: data.cardText
+                });
+                checkAllSubmissions();
+            } else if (data.type === 'PICK_WINNER') {
+                processWinnerSelection(data.winningPlayerId, data.cardText);
+            }
+        }
+
+        function handleClientReceiveData(data) {
+            if (data.type === 'SYNC_STATE') {
+                gameState = data.gameState;
+
+                const me = gameState.players.find(p => p.id === player.id);
+                if (me) {
+                    player.isCzar = me.isCzar;
+                    if (me.hand) player.hand = me.hand;
+                }
+
+                if (data.view) {
+                    showView(data.view);
+                }
+
+                updateGameUI();
+            }
+        }
+
+        function broadcastGameState(targetView = null) {
+            if (!player.isHost) return;
+            const payload = {
+                type: 'SYNC_STATE',
+                gameState: gameState,
+                view: targetView
+            };
+            Object.values(connections).forEach(conn => {
+                if (conn.open) conn.send(payload);
+            });
+            updateGameUI();
+        }
+
+        function updateTargetScore(val) {
+            gameState.targetScore = parseInt(val);
+            if (player.isHost) broadcastGameState();
+        }
+
+        /* ==========================================================================
+           4. PASS & PLAY AND AI BOTS ENGINE FIXES
+           ========================================================================== */
+        const BOT_NAMES = ['Ahmad Myvi', 'Auntie Bee', 'Muthu Boss', 'Ah Beng Klang'];
+
+        function startAIGame() {
+            player.name = getPlayerName();
+            player.isHost = true;
+            gameState.mode = 'SOLO';
+
+            gameState.players = [
+                { id: player.id, name: player.name, score: 0, isBot: false, isCzar: false, hand: [] },
+                { id: 'bot_1', name: BOT_NAMES[0], score: 0, isBot: true, isCzar: false, hand: [] },
+                { id: 'bot_2', name: BOT_NAMES[1], score: 0, isBot: true, isCzar: false, hand: [] }
+            ];
+
+            startMultiplayerGame();
+        }
+
+        function startPassAndPlay() {
+            player.name = getPlayerName();
+            player.isHost = true;
+            gameState.mode = 'PASSANDPLAY';
+
+            gameState.players = [
+                { id: player.id, name: player.name, score: 0, isBot: false, isCzar: false, hand: [] },
+                { id: 'p_2', name: 'Player 2', score: 0, isBot: false, isCzar: false, hand: [] },
+                { id: 'p_3', name: 'Player 3', score: 0, isBot: false, isCzar: false, hand: [] }
+            ];
+
+            startMultiplayerGame();
+        }
+
+        function addBotToRoom() {
+            if (!player.isHost) return;
+            const existingBots = gameState.players.filter(p => p.isBot).length;
+            if (existingBots >= BOT_NAMES.length) return;
+
+            const botName = BOT_NAMES[existingBots];
+            gameState.players.push({
+                id: 'bot_' + (existingBots + 1),
+                name: botName,
+                score: 0,
+                isBot: true,
+                isCzar: false,
+                hand: []
+            });
+
+            updateLobbyUI();
+            broadcastGameState();
+        }
+
+        function dismissPassShield() {
+            document.getElementById('pass-shield-modal').classList.add('hidden');
+        }
+
+        /* ==========================================================================
+           5. GAME ROUND ENGINE
+           ========================================================================== */
+        function updateLobbyUI() {
+            const list = document.getElementById('players-list');
+            list.innerHTML = '';
+            document.getElementById('player-count').innerText = gameState.players.length;
+
+            gameState.players.forEach(p => {
+                const badge = document.createElement('div');
+                badge.className = 'bg-zinc-800 border border-zinc-700 px-3 py-2 rounded-xl text-xs font-bold text-white flex justify-between items-center';
+                badge.innerHTML = `
+                    <span>${p.name} ${p.id === player.id ? '(You)' : ''}</span>
+                    ${p.isBot ? '<span class="text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-black">BOT</span>' : ''}
+                `;
+                list.appendChild(badge);
+            });
+        }
+
+        function startMultiplayerGame() {
+            if (gameState.players.length < 2) {
+                alert('Add at least 2 players or AI bots to begin!');
+                return;
+            }
+
+            gameState.round = 1;
+            gameState.czarIndex = 0;
+            dealInitialCards();
+            startNewRound();
+        }
+
+        function dealInitialCards() {
+            gameState.players.forEach((p, pIdx) => {
+                p.hand = [];
+                // Guaranteed Easter egg card in first hand for all human players
+                if (!p.isBot) {
+                    p.hand.push("roti canai 2 potong banjir kari ayam sambal asing - gajee");
+                }
+                while (p.hand.length < 5) {
+                    p.hand.push(getRandomWhiteCard());
+                }
+                if (p.id === player.id) {
+                    player.hand = p.hand;
+                }
+            });
+        }
+
+        function getRandomWhiteCard() {
+            return WHITE_CARDS[Math.floor(Math.random() * WHITE_CARDS.length)];
+        }
+
+        function getRandomBlackCard() {
+            return BLACK_CARDS[Math.floor(Math.random() * BLACK_CARDS.length)];
+        }
+
+        function startNewRound() {
+            gameState.phase = 'SUBMITTING';
+            gameState.submittedCards = [];
+            gameState.passCurrentPlayerIdx = 0;
+
+            gameState.players.forEach((p, idx) => {
+                p.isCzar = (idx === gameState.czarIndex);
+                // Replenish hand cards
+                while (p.hand.length < 5) {
+                    p.hand.push(getRandomWhiteCard());
+                }
+            });
+
+            const currentCzar = gameState.players[gameState.czarIndex];
+            player.isCzar = (currentCzar.id === player.id);
+
+            gameState.blackCard = getRandomBlackCard();
+
+            showView('view-game');
+
+            if (gameState.mode === 'PASSANDPLAY') {
+                advancePassAndPlayTurn();
+            } else if (player.isHost) {
+                broadcastGameState('view-game');
+                setTimeout(triggerBotSubmissions, 800);
+            }
+        }
+
+        function advancePassAndPlayTurn() {
+            if (gameState.mode !== 'PASSANDPLAY') return;
+
+            // Find next non-czar player who hasn't submitted
+            let activeP = null;
+            for (let i = 0; i < gameState.players.length; i++) {
+                const candidate = gameState.players[i];
+                if (!candidate.isCzar && !gameState.submittedCards.some(s => s.playerId === candidate.id)) {
+                    activeP = candidate;
+                    break;
+                }
+            }
+
+            if (activeP) {
+                player.id = activeP.id;
+                player.name = activeP.name;
+                player.hand = activeP.hand;
+                player.isCzar = false;
+
+                document.getElementById('pass-shield-text').innerText = `Hand the device to ${activeP.name} to pick a card!`;
+                document.getElementById('pass-shield-modal').classList.remove('hidden');
+                updateGameUI();
+            } else {
+                // All submitted, hand device to Czar to judge
+                const czarP = gameState.players[gameState.czarIndex];
+                player.id = czarP.id;
+                player.name = czarP.name;
+                player.isCzar = true;
+                gameState.phase = 'JUDGING';
+
+                document.getElementById('pass-shield-text').innerText = `Hand the device to Card Czar (${czarP.name}) to judge!`;
+                document.getElementById('pass-shield-modal').classList.remove('hidden');
+                updateGameUI();
+            }
+        }
+
+        function triggerBotSubmissions() {
+            if (!player.isHost) return;
+
+            gameState.players.forEach(p => {
+                if (p.isBot && !p.isCzar) {
+                    const randomHandIdx = Math.floor(Math.random() * p.hand.length);
+                    const chosen = p.hand.splice(randomHandIdx, 1)[0] || getRandomWhiteCard();
+                    p.hand.push(getRandomWhiteCard());
+
+                    if (!gameState.submittedCards.some(s => s.playerId === p.id)) {
+                        gameState.submittedCards.push({
+                            playerId: p.id,
+                            cardText: chosen
+                        });
+                    }
+                }
+            });
+
+            checkAllSubmissions();
+        }
+
+        function selectHandCard(cardText, element) {
+            if (player.isCzar) return;
+
+            selectedCard = cardText;
+            document.querySelectorAll('.hand-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+
+            document.getElementById('submit-card-btn').disabled = false;
+        }
+
+        function submitSelectedCard() {
+            if (!selectedCard || player.isCzar) return;
+
+            document.getElementById('submit-card-btn').disabled = true;
+
+            const currPlayer = gameState.players.find(p => p.id === player.id);
+            if (currPlayer) {
+                const cardIdx = currPlayer.hand.indexOf(selectedCard);
+                if (cardIdx > -1) {
+                    currPlayer.hand.splice(cardIdx, 1);
+                    currPlayer.hand.push(getRandomWhiteCard());
+                }
+                player.hand = currPlayer.hand;
+            }
+
+            if (gameState.mode === 'PASSANDPLAY') {
+                gameState.submittedCards.push({
+                    playerId: player.id,
+                    cardText: selectedCard
+                });
+                selectedCard = null;
+
+                const nonCzarCount = gameState.players.filter(p => !p.isCzar).length;
+                if (gameState.submittedCards.length >= nonCzarCount) {
+                    gameState.phase = 'JUDGING';
+                }
+                advancePassAndPlayTurn();
+            } else if (player.isHost) {
+                gameState.submittedCards.push({
+                    playerId: player.id,
+                    cardText: selectedCard
+                });
+                selectedCard = null;
+                checkAllSubmissions();
+            } else {
+                hostConn.send({
+                    type: 'SUBMIT_CARD',
+                    playerId: player.id,
+                    cardText: selectedCard
+                });
+                selectedCard = null;
+            }
+
+            renderHand();
+        }
+
+        function checkAllSubmissions() {
+            if (!player.isHost) return;
+
+            const nonCzarPlayers = gameState.players.filter(p => !p.isCzar);
+            if (gameState.submittedCards.length >= nonCzarPlayers.length) {
+                gameState.phase = 'JUDGING';
+                broadcastGameState();
+
+                // If Czar is a bot, auto-pick winner after delay
+                const czarP = gameState.players[gameState.czarIndex];
+                if (czarP && czarP.isBot) {
+                    setTimeout(() => {
+                        const randomWinningSub = gameState.submittedCards[Math.floor(Math.random() * gameState.submittedCards.length)];
+                        if (randomWinningSub) {
+                            processWinnerSelection(randomWinningSub.playerId, randomWinningSub.cardText);
+                        }
+                    }, 1200);
+                }
+            } else {
+                broadcastGameState();
+            }
+        }
+
+        function pickWinnerByCzar(winningPlayerId, cardText) {
+            if (!player.isCzar) return;
+
+            if (gameState.mode === 'PASSANDPLAY' || player.isHost) {
+                processWinnerSelection(winningPlayerId, cardText);
+            } else {
+                hostConn.send({
+                    type: 'PICK_WINNER',
+                    winningPlayerId: winningPlayerId,
+                    cardText: cardText
+                });
+            }
+        }
+
+        function processWinnerSelection(winningPlayerId, cardText) {
+            const winner = gameState.players.find(p => p.id === winningPlayerId);
+            if (winner) {
+                winner.score += 1;
+            }
+
+            gameState.phase = 'ANNOUNCING';
+
+            document.getElementById('modal-round-winner').classList.remove('hidden');
+            document.getElementById('winner-announcement-text').innerText = `${winner ? winner.name : 'Someone'} won this round!`;
+            document.getElementById('winning-question').innerText = gameState.blackCard;
+            document.getElementById('winning-answer').innerText = `"${cardText}"`;
+
+            if (winner && winner.score >= gameState.targetScore && gameState.targetScore < 999) {
+                document.getElementById('winner-title-text').innerText = "GAME CHAMPION!";
+                document.getElementById('winner-announcement-text').innerText = `${winner.name} IS THE ULTIMATE MALAYSIAN CAH CHAMPION!`;
+                document.getElementById('next-round-btn').innerText = "PLAY AGAIN";
+            } else {
+                document.getElementById('winner-title-text').innerText = "ROUND WINNER!";
+                document.getElementById('next-round-btn').innerText = "NEXT ROUND";
+            }
+
+            if (player.isHost) {
+                broadcastGameState();
+            }
+        }
+
+        function nextRound() {
+            document.getElementById('modal-round-winner').classList.add('hidden');
+
+            if (player.isHost || gameState.mode === 'PASSANDPLAY') {
+                const topScore = Math.max(...gameState.players.map(p => p.score));
+                if (topScore >= gameState.targetScore && gameState.targetScore < 999) {
+                    gameState.players.forEach(p => p.score = 0);
+                    gameState.round = 1;
+                } else {
+                    gameState.round += 1;
+                }
+
+                gameState.czarIndex = (gameState.czarIndex + 1) % gameState.players.length;
+                startNewRound();
+            }
+        }
+
+        /* ==========================================================================
+           6. UI RENDER ENGINE
+           ========================================================================== */
+        function showView(viewId) {
+            ['view-lobby', 'view-room', 'view-game'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function updateGameUI() {
+            document.getElementById('round-num').innerText = gameState.round;
+            const currentCzar = gameState.players.find(p => p.isCzar);
+            document.getElementById('czar-name').innerText = currentCzar ? currentCzar.name : 'Unknown';
+
+            document.getElementById('black-card-text').innerText = gameState.blackCard || 'Waiting...';
+
+            const statusMsg = document.getElementById('game-status-msg');
+            if (gameState.phase === 'SUBMITTING') {
+                statusMsg.innerText = player.isCzar ? "YOU ARE CZAR: Waiting for answers..." : "Pick your funniest answer card!";
+            } else if (gameState.phase === 'JUDGING') {
+                statusMsg.innerText = player.isCzar ? "YOU ARE CZAR: Click the winning response below!" : "Card Czar is judging responses...";
+            }
+
+            document.getElementById('hand-player-label').innerText = gameState.mode === 'PASSANDPLAY' ? `${player.name}'s` : 'Your';
+
+            renderHand();
+            renderSubmittedCards();
+            renderScoreboard();
+        }
+
+        function renderHand() {
+            const grid = document.getElementById('hand-cards-grid');
+            grid.innerHTML = '';
+
+            if (player.isCzar) {
+                grid.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-6 italic text-xs">You are the Card Czar for this round. Sit back and judge!</div>`;
+                document.getElementById('submit-card-btn').classList.add('hidden');
+                return;
+            } else {
+                document.getElementById('submit-card-btn').classList.remove('hidden');
+            }
+
+            const activeHand = player.hand || [];
+
+            activeHand.forEach(cardText => {
+                const isEasterEgg = cardText.includes("gajee");
+                const card = document.createElement('div');
+                card.className = `cah-card ${isEasterEgg ? 'cah-card-easteregg' : 'cah-card-white'} hand-card cursor-pointer hover:border-black text-xs font-bold leading-snug`;
+                card.onclick = () => selectHandCard(cardText, card);
+                card.innerHTML = `
+                    <div>${cardText}</div>
+                    <div class="text-[9px] text-zinc-400 border-t border-zinc-200 pt-1 mt-2 uppercase flex justify-between">
+                        <span>${isEasterEgg ? 'GOLDEN EASTER EGG' : 'KUTS WHITE'}</span>
+                        ${isEasterEgg ? '<i class="fas fa-star text-yellow-500"></i>' : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderSubmittedCards() {
+            const judgingArea = document.getElementById('czar-judging-area');
+            const grid = document.getElementById('submitted-cards-grid');
+            grid.innerHTML = '';
+
+            if (gameState.phase === 'JUDGING' || gameState.phase === 'ANNOUNCING') {
+                judgingArea.classList.remove('hidden');
+
+                gameState.submittedCards.forEach(sub => {
+                    const isEasterEgg = sub.cardText.includes("gajee");
+                    const card = document.createElement('div');
+                    card.className = `cah-card ${isEasterEgg ? 'cah-card-easteregg' : 'cah-card-white'} text-xs sm:text-sm font-black leading-snug ${player.isCzar ? 'cursor-pointer hover:scale-105 card-red-border' : ''}`;
+                    
+                    if (player.isCzar && gameState.phase === 'JUDGING') {
+                        card.onclick = () => pickWinnerByCzar(sub.playerId, sub.cardText);
+                    }
+
+                    card.innerHTML = `
+                        <div>${sub.cardText}</div>
+                        <div class="text-[9px] text-zinc-400 border-t border-zinc-200 pt-1 mt-2 uppercase flex justify-between">
+                            <span>Answer</span>
+                            ${player.isCzar ? '<span class="text-red-600 font-bold">PICK THIS</span>' : ''}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                judgingArea.classList.add('hidden');
+            }
+        }
+
+        function renderScoreboard() {
+            const list = document.getElementById('scoreboard-list');
+            list.innerHTML = '';
+
+            gameState.players.forEach(p => {
+                const item = document.createElement('div');
+                item.className = `p-2 rounded-lg border flex justify-between items-center ${p.isCzar ? 'border-yellow-500 bg-yellow-500/10' : 'border-zinc-800 bg-black'}`;
+                item.innerHTML = `
+                    <span class="font-bold truncate text-zinc-200">${p.name} ${p.isCzar ? '<i class="fas fa-crown text-yellow-400 ml-1"></i>' : ''}</span>
+                    <span class="font-black text-yellow-400 bg-zinc-800 px-2 py-0.5 rounded-md">${p.score} pt</span>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function copyRoomCode() {
+            const code = document.getElementById('room-code-display').innerText;
+            navigator.clipboard.writeText(code);
+            alert('Room Code copied to clipboard: ' + code);
+        }
+    </script>
+</body>
+</html>
