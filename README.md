@@ -40,26 +40,9 @@ A single-file, browser-based, P2P multiplayer party game inspired by Cards Again
 - **[PeerJS](https://peerjs.com/)** — WebRTC peer-to-peer multiplayer networking
 - **[Font Awesome](https://fontawesome.com/)** — icons
 
-## Running Locally
-
-No build tools or dependencies to install — it's a single HTML file.
-
-```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
-```
-
-Then simply open `index.html` in your browser, or serve it locally:
-
-```bash
-python3 -m http.server 8000
-```
-
-Visit `http://localhost:8000` in your browser.
-
 ## Multiplayer Notes
 
-Since multiplayer uses WebRTC (PeerJS) for direct peer-to-peer connections, all players need a stable internet connection and, in some network setups (strict corporate/school firewalls), may need to be on the same network or a network that allows WebRTC traffic.
+Since multiplayer uses WebRTC (PeerJS) for direct peer-to-peer connections, all players need a stable internet connection and, in some network setups (strict corporate/school firewalls), may need to be on the same network or a network that allows WebRTC traffic. game Still buggy on multiplayer but it will be fix soon and be published in itch.io
 
 ## Credits
 
