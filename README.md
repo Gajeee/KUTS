@@ -5,6 +5,8 @@
 A single-file, browser-based, P2P multiplayer party game inspired by Cards Against Humanity, remixed with unfiltered Manglish and Malaysian slang. No server, no install — just open the page and start playing with friends over Wi-Fi, or solo against AI bots.
 
 > ⚠️ **18+ Content Warning:** This game contains unfiltered, adult Malaysian slang and humor. Not for the faint of hati.
+>
+> ⚠️BET IS OUT STILL BUGGY V2 WILL BE OUT SOON 
 
 ## Screenshots
 
