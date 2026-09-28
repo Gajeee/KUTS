@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PeerJS for WebRTC P2P Multiplayer -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script>if (typeof Peer === 'undefined') { document.write('<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"><\/script>'); }</script>
     <!-- FontAwesome for UI Icons (Strictly No Emojis) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -468,7 +469,27 @@
             "In 2030, Bank Negara will replace Ringgit Malaysia currency with ____.",
             "Why is the LRT suddenly stopped in the middle of track again? ____.",
             "The main cause of gaduh at Pasar Malam Klang: ____.",
-            "What is inside Ah Beng's modified Honda Civic bonnet? ____."
+            "What is inside Ah Beng's modified Honda Civic bonnet? ____.",
+            "The real reason the Grab driver cancelled on me: ____.",
+            "Mak's WhatsApp family group just exploded because of ____.",
+            "During Raya open house, Pak Long secretly hid ____ inside the rendang.",
+            "The Nasi Lemak auntie's secret ingredient is finally revealed: ____.",
+            "What is that smell coming from the office fridge? ____.",
+            "Petronas' next viral ad campaign will feature ____.",
+            "After the flash flood in KL, all we managed to save was ____.",
+            "The wedding buffet turned into chaos because of ____.",
+            "The reason Kopitiam Uncle raised the kopi price by 50 sen: ____.",
+            "I knew he was a keeper when he ordered ____ on our first date.",
+            "Ah Beng's genius business idea for Pasar Malam: ____.",
+            "What makes KL traffic worse than Monday morning? ____.",
+            "The Ministry of Education just added ____ to the SPM syllabus.",
+            "My cousin working in Singapore keeps bragging about ____.",
+            "Why did the Mamak run out of roti canai at 10 PM? ____.",
+            "The TikTok trend that finally got banned in Malaysia: ____.",
+            "The next viral drama on TV3 is all about ____.",
+            "Tourists in Kuala Lumpur should never, ever try ____.",
+            "At 3 AM at the Mamak, my friend finally confessed ____.",
+            "The shopping mall's brand new mascot is ____."
         ];
 
         const WHITE_CARDS = [
@@ -521,7 +542,77 @@
             "Tiktok influencer blocking traffic for dance video.",
             "Stuck in jam near Genting Highlands cable car.",
             "Eating Durian with bare hands inside aircond room.",
-            "Malu Apa Bossku mentality."
+            "Malu Apa Bossku mentality.",
+
+            // MORE ANSWERS
+            "Touch 'n Go balance RM0.30 at the toll gate.",
+            "Auntie screaming 'Boss, kurang pedas!' then crying from the sambal.",
+            "Grab driver cancelling after 20 minutes of waiting.",
+            "Foodpanda rider eating my Char Kuey Teow.",
+            "Char Kuey Teow with zero cockles and zero regrets.",
+            "Bringing the whole family for a 'quick' Pasar Malam trip.",
+            "Nasi Kandar banjir kuah until the plate floats.",
+            "Cendol so sweet the dentist sent a thank-you card.",
+            "Bro who keeps saying 'nanti I bayar' since 2019.",
+            "Group project member who only appears for the photo.",
+            "WhatsApp family group sending 'Selamat Pagi' flower GIFs at 5 AM.",
+            "Mak's slipper flying at Mach 3.",
+            "Flash flood inside the shopping mall car park.",
+            "Sambal belacan smell inside the office lift.",
+            "Bird's nest soup at RM800 a bowl.",
+            "Curry Puff with more air than filling.",
+            "Ais Kacang melting faster than my savings.",
+            "Singing karaoke at 2 AM until the neighbour calls the police.",
+            "Ah Pek playing Chinese opera on speakerphone in the LRT.",
+            "Bus driver treating the highway like Mario Kart.",
+            "Feeder bus that only arrives once per lunar eclipse.",
+            "Stray cat stealing my satay.",
+            "Monkey stealing a tourist's Milo at Batu Caves.",
+            "Kucing jantan screaming outside my window at midnight.",
+            "Nasi campur uncle who calculates the price by vibes.",
+            "Two hours of 'lepak' that turned into a 4 AM Mamak session.",
+            "Teh Tarik pulled so high it hits the ceiling fan.",
+            "Wet market auntie throwing shade with a kilo of prawns.",
+            "Roadside durian seller swearing 'D24, confirm sedap'.",
+            "Cousin asking 'bila nak kahwin?' at every family gathering.",
+            "Shopee 11.11 cart total: RM2,300.",
+            "Ordering a 'small' Milo Dinosaur and receiving a bucket.",
+            "Ah Boy revving his modified exhaust at 6 AM on Sunday.",
+            "Lying 'I'm on the way' while still in the shower.",
+            "Quick stop at 7-Eleven that lasts 45 minutes.",
+            "Toll RFID that only works on the second try.",
+            "Uncle playing Hokkien oldies at full volume on the school run.",
+            "Chicken rice uncle who remembers everyone's order except yours.",
+            "Cutting the Pasar Malam queue like it's an Olympic sport.",
+            "Ipoh white coffee ruining every other coffee for me.",
+            "Shopee seller replying 'ready stock' but shipping in 3 weeks.",
+            "Getting 'seen' by my crush on WhatsApp for 3 days.",
+            "Makcik gossiping louder than the karaoke machine.",
+            "Tapau-ing five plastic bags of food from the wedding buffet.",
+            "Pakcik taking 12 pieces of rendang at the kenduri.",
+            "Drinking 3 cups of Kopi O Peng and calling it self-care.",
+            "Boss saying 'we are like a family' then cutting overtime pay.",
+            "Gaji arriving on the 25th and vanishing by the 26th.",
+            "Sneaking a full Nasi Lemak bungkus into the cinema.",
+            "Kopitiam uncle judging my order with his eyebrows.",
+            "Wearing slippers on a rainy motorbike ride and regretting everything.",
+            "Ah Lian's fake lashes falling into the Bak Kut Teh.",
+            "Pasar Malam 'branded' bag that says Adibas.",
+            "Wifi password: tanyalahowner123.",
+            "Unifi buffering at the exact moment of the winning goal.",
+            "Cikgu Bahasa correcting my Manglish with a red pen.",
+            "Naming the family Wi-Fi 'Pakcik Sotong Router'.",
+            "Ayam Penyet with sambal hot enough to reveal past lives.",
+            "Hokkien Mee cooked by an uncle who has seen things.",
+            "Doing gotong-royong by watching from the car.",
+            "Stuck behind a lorry carrying 4,000 live chickens.",
+            "Karipap so hot it took my ID, dignity and tongue.",
+            "Aunty asking 'dah makan?' while handing you a third plate.",
+            "Neighbour's rooster starting the morning shift at 4 AM.",
+            "Cutting hair at the barber and getting a free 'nasihat' on life.",
+            "Belanja-ing everyone at Mamak because I lost the bet.",
+            "Kena tegur by Makcik for wearing shorts to the pasar.",
+            "Phone battery at 1% while waiting for the Grab pin."
         ];
 
         /* ==========================================================================
@@ -555,9 +646,37 @@
 
         let selectedCard = null;
 
+        const EASTER_EGG_CARD = "roti canai 2 potong banjir kari ayam sambal asing - gajee";
+
+        // Decks: draw without replacement so nobody keeps getting the same answers
+        let whiteDeck = [];
+        let blackDeck = [];
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[ch]));
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             player.id = 'p_' + Math.random().toString(36).substring(2, 7);
             document.getElementById('player-nickname').value = 'Player_' + player.id.substring(2, 5);
+
+            const codeInput = document.getElementById('join-code-input');
+            codeInput.addEventListener('input', () => {
+                codeInput.value = codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            });
+            codeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') connectToHost();
+            });
         });
 
         /* ==========================================================================
@@ -568,18 +687,105 @@
             return input || 'Malaysian_' + player.id.substring(2, 5);
         }
 
-        function createHostLobby() {
+        const PEER_PREFIX = 'kuts-cah-';
+        const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const MAX_PLAYERS = 8;
+
+        // STUN + TURN so devices on the same Wi-Fi/LAN (and different networks) can actually connect
+        const PEER_OPTIONS = {
+            debug: 1,
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:global.stun.twilio.com:3478' },
+                    { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+                    { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+                    { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+                ]
+            }
+        };
+
+        let joining = false;
+        let joinTimer = null;
+
+        function generateRoomCode() {
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                code += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+            }
+            return code;
+        }
+
+        function freshGameState() {
+            const sel = document.getElementById('target-score-select');
+            return {
+                players: [],
+                czarIndex: 0,
+                blackCard: '',
+                submittedCards: [],
+                phase: 'SUBMITTING',
+                round: 1,
+                targetScore: sel ? parseInt(sel.value) : 8,
+                mode: 'MULTIPLAYER',
+                passCurrentPlayerIdx: 0,
+                started: false,
+                lastWinner: null
+            };
+        }
+
+        function destroyPeer() {
+            clearTimeout(joinTimer);
+            joining = false;
+            try { if (hostConn) hostConn.close(); } catch (e) {}
+            try { if (peer) peer.destroy(); } catch (e) {}
+            peer = null;
+            hostConn = null;
+            connections = {};
+        }
+
+        function peerLibMissing() {
+            if (typeof Peer === 'undefined') {
+                alert('Multiplayer library failed to load. Please check your internet connection (it is needed to connect players) and refresh the page.');
+                return true;
+            }
+            return false;
+        }
+
+        function leaveRoom() {
+            destroyPeer();
+            player.isHost = false;
+            player.isCzar = false;
+            player.hand = [];
+            selectedCard = null;
+            gameState = freshGameState();
+            document.getElementById('modal-round-winner').classList.add('hidden');
+            showView('view-lobby');
+        }
+
+        function createHostLobby(attempt) {
+            attempt = (typeof attempt === 'number') ? attempt : 0;
+            if (peerLibMissing()) return;
+
+            destroyPeer();
             player.name = getPlayerName();
             player.isHost = true;
-            gameState.mode = 'MULTIPLAYER';
-            roomCode = 'KUTS' + Math.floor(10 + Math.random() * 89);
+            player.isCzar = false;
+            gameState = freshGameState();
+            roomCode = generateRoomCode();
 
-            peer = new Peer(roomCode);
+            let opened = false;
+            const thisPeer = new Peer(PEER_PREFIX + roomCode, PEER_OPTIONS);
+            peer = thisPeer;
 
-            peer.on('open', (id) => {
+            thisPeer.on('open', () => {
+                opened = true;
                 showView('view-room');
-                document.getElementById('room-code-display').innerText = id;
+                document.getElementById('room-code-display').innerText = roomCode;
+                document.getElementById('host-badge').innerText = 'Host Active';
                 document.getElementById('start-game-btn').classList.remove('hidden');
+                document.getElementById('add-bot-btn').classList.remove('hidden');
 
                 gameState.players = [{
                     id: player.id,
@@ -592,13 +798,78 @@
                 updateLobbyUI();
             });
 
-            peer.on('connection', (conn) => {
+            thisPeer.on('connection', (conn) => {
                 conn.on('data', (data) => handleHostReceiveData(conn, data));
+                conn.on('close', () => handleHostConnClosed(conn));
+                conn.on('error', () => handleHostConnClosed(conn));
             });
 
-            peer.on('error', () => {
-                alert('Room code busy. Please try hosting again!');
+            // Keep the room alive if the signalling server drops us for a moment
+            thisPeer.on('disconnected', () => {
+                if (peer === thisPeer && !thisPeer.destroyed) {
+                    try { thisPeer.reconnect(); } catch (e) {}
+                }
             });
+
+            thisPeer.on('error', (err) => {
+                if (peer !== thisPeer) return;
+                if (err.type === 'unavailable-id' && attempt < 5) {
+                    createHostLobby(attempt + 1); // code already taken, roll a new one
+                    return;
+                }
+                if (!opened) {
+                    destroyPeer();
+                    alert('Could not create the room (' + err.type + '). Check your internet connection and try again.');
+                } else {
+                    console.warn('Peer error:', err);
+                }
+            });
+        }
+
+        function handleHostConnClosed(conn) {
+            const entry = Object.entries(connections).find(([, c]) => c === conn);
+            if (!entry) return;
+            const pid = entry[0];
+            delete connections[pid];
+            removePlayerFromGame(pid);
+        }
+
+        function removePlayerFromGame(pid) {
+            const idx = gameState.players.findIndex(p => p.id === pid);
+            if (idx === -1) return;
+
+            const wasCzar = gameState.players[idx].isCzar;
+            gameState.players.splice(idx, 1);
+            gameState.submittedCards = gameState.submittedCards.filter(s => s.playerId !== pid);
+
+            if (!gameState.started) {
+                updateLobbyUI();
+                broadcastGameState();
+                return;
+            }
+
+            if (gameState.players.length < 2) {
+                gameState.started = false;
+                gameState.phase = 'SUBMITTING';
+                gameState.lastWinner = null;
+                document.getElementById('modal-round-winner').classList.add('hidden');
+                showView('view-room');
+                updateLobbyUI();
+                broadcastGameState('view-room');
+                alert('Not enough players left. Back to the room lobby.');
+                return;
+            }
+
+            if (idx < gameState.czarIndex) gameState.czarIndex--;
+            gameState.czarIndex = gameState.czarIndex % gameState.players.length;
+
+            if (wasCzar) {
+                startNewRound();
+            } else if (gameState.phase === 'SUBMITTING') {
+                checkAllSubmissions();
+            } else {
+                broadcastGameState();
+            }
         }
 
         function showJoinModal() {
@@ -607,48 +878,121 @@
 
         function closeJoinModal() {
             document.getElementById('modal-join').classList.add('hidden');
+            if (joining) {
+                // cancelled while still connecting
+                destroyPeer();
+            }
         }
 
         function connectToHost() {
+            if (joining) return;
+            if (peerLibMissing()) return;
+
+            const targetCode = document.getElementById('join-code-input').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (!targetCode) {
+                alert('Please enter the Room Code from the host.');
+                return;
+            }
+
+            destroyPeer();
             player.name = getPlayerName();
             player.isHost = false;
-            gameState.mode = 'MULTIPLAYER';
+            player.isCzar = false;
+            gameState = freshGameState();
+            joining = true;
 
-            const targetCode = document.getElementById('join-code-input').value.trim().toUpperCase();
-            if (!targetCode) return;
+            let connected = false;
+            const thisPeer = new Peer(undefined, PEER_OPTIONS);
+            peer = thisPeer;
 
-            peer = new Peer();
+            const fail = (msg) => {
+                if (peer !== thisPeer) return;
+                destroyPeer();
+                alert(msg);
+            };
 
-            peer.on('open', () => {
-                hostConn = peer.connect(targetCode);
+            joinTimer = setTimeout(() => {
+                if (!connected) {
+                    fail('Could not reach room ' + targetCode + '.\n\nTips:\n- Check the code\n- Make sure the host room is still open\n- Both devices need internet access\n- Turn off VPN / guest Wi-Fi "client isolation"');
+                }
+            }, 15000);
 
-                hostConn.on('open', () => {
+            thisPeer.on('open', () => {
+                if (peer !== thisPeer) return;
+                const conn = thisPeer.connect(PEER_PREFIX + targetCode, { reliable: true });
+                hostConn = conn;
+
+                conn.on('open', () => {
+                    if (peer !== thisPeer) return;
+                    connected = true;
+                    joining = false;
+                    clearTimeout(joinTimer);
                     closeJoinModal();
                     showView('view-room');
                     document.getElementById('room-code-display').innerText = targetCode;
                     document.getElementById('host-badge').innerText = 'CLIENT CONNECTED';
                     document.getElementById('add-bot-btn').classList.add('hidden');
+                    document.getElementById('start-game-btn').classList.add('hidden');
 
-                    hostConn.send({
+                    conn.send({
                         type: 'JOIN',
                         player: { id: player.id, name: player.name }
                     });
                 });
 
-                hostConn.on('data', (data) => handleClientReceiveData(data));
+                conn.on('data', (data) => handleClientReceiveData(data));
 
-                hostConn.on('error', () => {
-                    alert('Could not connect to room code!');
+                conn.on('close', () => {
+                    if (peer !== thisPeer) return;
+                    if (connected) {
+                        alert('The host closed the room.');
+                        leaveRoom();
+                    } else {
+                        fail('Could not connect to room code!');
+                    }
                 });
+
+                conn.on('error', () => fail('Could not connect to room code!'));
+            });
+
+            thisPeer.on('error', (err) => {
+                if (peer !== thisPeer) return;
+                if (connected) { console.warn('Peer error:', err); return; }
+                if (err.type === 'peer-unavailable') {
+                    fail('Room "' + targetCode + '" was not found. Check the code and make sure the host room is open.');
+                } else {
+                    fail('Connection error (' + err.type + '). Check your internet connection and try again.');
+                }
             });
         }
 
         function handleHostReceiveData(conn, data) {
+            if (!data || !data.type) return;
+
             if (data.type === 'JOIN') {
-                connections[data.player.id] = conn;
+                if (!data.player || !data.player.id) return;
+                const pid = String(data.player.id);
+
+                const existing = gameState.players.find(p => p.id === pid);
+                if (existing && !existing.isBot) {
+                    connections[pid] = conn; // same player reconnecting
+                    broadcastGameState(gameState.started ? 'view-game' : null);
+                    return;
+                }
+
+                if (gameState.started || gameState.players.length >= MAX_PLAYERS) {
+                    const reason = gameState.started
+                        ? 'This game has already started. Ask the host to start a new one.'
+                        : 'This room is full.';
+                    try { conn.send({ type: 'REJECT', reason: reason }); } catch (e) {}
+                    setTimeout(() => { try { conn.close(); } catch (e) {} }, 400);
+                    return;
+                }
+
+                connections[pid] = conn;
                 gameState.players.push({
-                    id: data.player.id,
-                    name: data.player.name,
+                    id: pid,
+                    name: String(data.player.name || 'Player').slice(0, 18),
                     score: 0,
                     isBot: false,
                     isCzar: false,
@@ -657,17 +1001,37 @@
                 broadcastGameState();
                 updateLobbyUI();
             } else if (data.type === 'SUBMIT_CARD') {
+                const p = gameState.players.find(x => x.id === data.playerId);
+                if (!p || connections[p.id] !== conn) return;
+                if (gameState.phase !== 'SUBMITTING' || p.isCzar) return;
+                if (gameState.submittedCards.some(s => s.playerId === p.id)) return;
+
+                const cardIdx = p.hand.indexOf(data.cardText);
+                if (cardIdx === -1) return;
+
+                p.hand.splice(cardIdx, 1);
+                p.hand.push(drawWhiteCard(p.hand));
                 gameState.submittedCards.push({
-                    playerId: data.playerId,
+                    playerId: p.id,
                     cardText: data.cardText
                 });
                 checkAllSubmissions();
             } else if (data.type === 'PICK_WINNER') {
+                const czarP = gameState.players[gameState.czarIndex];
+                if (!czarP || connections[czarP.id] !== conn) return;
                 processWinnerSelection(data.winningPlayerId, data.cardText);
             }
         }
 
         function handleClientReceiveData(data) {
+            if (!data || !data.type) return;
+
+            if (data.type === 'REJECT') {
+                alert(data.reason || 'Could not join this room.');
+                leaveRoom();
+                return;
+            }
+
             if (data.type === 'SYNC_STATE') {
                 gameState = data.gameState;
 
@@ -681,26 +1045,42 @@
                     showView(data.view);
                 }
 
+                updateLobbyUI();
                 updateGameUI();
             }
         }
 
+        function buildStateFor(pid) {
+            const copy = JSON.parse(JSON.stringify(gameState));
+            // Never leak other players' hands (or unrevealed answers) to a client
+            copy.players.forEach(p => { if (p.id !== pid) p.hand = []; });
+            if (copy.phase === 'SUBMITTING') {
+                copy.submittedCards = copy.submittedCards.map(s => ({ playerId: s.playerId, cardText: '' }));
+            }
+            return copy;
+        }
+
         function broadcastGameState(targetView = null) {
             if (!player.isHost) return;
-            const payload = {
-                type: 'SYNC_STATE',
-                gameState: gameState,
-                view: targetView
-            };
-            Object.values(connections).forEach(conn => {
-                if (conn.open) conn.send(payload);
+            Object.entries(connections).forEach(([pid, conn]) => {
+                if (!conn || !conn.open) return;
+                try {
+                    conn.send({
+                        type: 'SYNC_STATE',
+                        gameState: buildStateFor(pid),
+                        view: targetView
+                    });
+                } catch (e) {
+                    console.warn('Send failed', e);
+                }
             });
             updateGameUI();
         }
 
         function updateTargetScore(val) {
+            if (!player.isHost) return;
             gameState.targetScore = parseInt(val);
-            if (player.isHost) broadcastGameState();
+            broadcastGameState();
         }
 
         /* ==========================================================================
@@ -709,6 +1089,8 @@
         const BOT_NAMES = ['Ahmad Myvi', 'Auntie Bee', 'Muthu Boss', 'Ah Beng Klang'];
 
         function startAIGame() {
+            destroyPeer();
+            gameState = freshGameState();
             player.name = getPlayerName();
             player.isHost = true;
             gameState.mode = 'SOLO';
@@ -723,6 +1105,8 @@
         }
 
         function startPassAndPlay() {
+            destroyPeer();
+            gameState = freshGameState();
             player.name = getPlayerName();
             player.isHost = true;
             gameState.mode = 'PASSANDPLAY';
@@ -739,7 +1123,7 @@
         function addBotToRoom() {
             if (!player.isHost) return;
             const existingBots = gameState.players.filter(p => p.isBot).length;
-            if (existingBots >= BOT_NAMES.length) return;
+            if (existingBots >= BOT_NAMES.length || gameState.players.length >= MAX_PLAYERS) return;
 
             const botName = BOT_NAMES[existingBots];
             gameState.players.push({
@@ -767,11 +1151,17 @@
             list.innerHTML = '';
             document.getElementById('player-count').innerText = gameState.players.length;
 
+            const sel = document.getElementById('target-score-select');
+            if (sel) {
+                sel.value = String(gameState.targetScore);
+                sel.disabled = !player.isHost;
+            }
+
             gameState.players.forEach(p => {
                 const badge = document.createElement('div');
                 badge.className = 'bg-zinc-800 border border-zinc-700 px-3 py-2 rounded-xl text-xs font-bold text-white flex justify-between items-center';
                 badge.innerHTML = `
-                    <span>${p.name} ${p.id === player.id ? '(You)' : ''}</span>
+                    <span>${escapeHtml(p.name)} ${p.id === player.id ? '(You)' : ''}</span>
                     ${p.isBot ? '<span class="text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-black">BOT</span>' : ''}
                 `;
                 list.appendChild(badge);
@@ -779,26 +1169,62 @@
         }
 
         function startMultiplayerGame() {
+            if (!player.isHost) return;
             if (gameState.players.length < 2) {
                 alert('Add at least 2 players or AI bots to begin!');
                 return;
             }
 
+            gameState.started = true;
             gameState.round = 1;
             gameState.czarIndex = 0;
+            gameState.lastWinner = null;
+            gameState.players.forEach(p => p.score = 0);
+            whiteDeck = [];
+            blackDeck = [];
             dealInitialCards();
             startNewRound();
         }
 
+        function refillWhiteDeck() {
+            const inHands = new Set();
+            gameState.players.forEach(p => (p.hand || []).forEach(c => inHands.add(c)));
+            whiteDeck = shuffleArray([...new Set(WHITE_CARDS)].filter(c => !inHands.has(c)));
+        }
+
+        // Draw a card that is not already in the given hand (no duplicate answers in one hand)
+        function drawWhiteCard(hand) {
+            hand = hand || [];
+            for (let attempt = 0; attempt < 2; attempt++) {
+                if (whiteDeck.length === 0) refillWhiteDeck();
+                const i = whiteDeck.findIndex(c => !hand.includes(c));
+                if (i > -1) return whiteDeck.splice(i, 1)[0];
+                refillWhiteDeck();
+            }
+            const pool = WHITE_CARDS.filter(c => !hand.includes(c));
+            return pool[Math.floor(Math.random() * pool.length)] || WHITE_CARDS[0];
+        }
+
+        function getRandomBlackCard() {
+            if (blackDeck.length === 0) {
+                blackDeck = shuffleArray([...new Set(BLACK_CARDS)]);
+                // avoid showing the same question twice in a row after a reshuffle
+                if (blackDeck.length > 1 && blackDeck[blackDeck.length - 1] === gameState.blackCard) {
+                    blackDeck.unshift(blackDeck.pop());
+                }
+            }
+            return blackDeck.pop();
+        }
+
         function dealInitialCards() {
-            gameState.players.forEach((p, pIdx) => {
-                p.hand = [];
+            gameState.players.forEach(p => { p.hand = []; });
+            gameState.players.forEach(p => {
                 // Guaranteed Easter egg card in first hand for all human players
                 if (!p.isBot) {
-                    p.hand.push("roti canai 2 potong banjir kari ayam sambal asing - gajee");
+                    p.hand.push(EASTER_EGG_CARD);
                 }
                 while (p.hand.length < 5) {
-                    p.hand.push(getRandomWhiteCard());
+                    p.hand.push(drawWhiteCard(p.hand));
                 }
                 if (p.id === player.id) {
                     player.hand = p.hand;
@@ -806,29 +1232,28 @@
             });
         }
 
-        function getRandomWhiteCard() {
-            return WHITE_CARDS[Math.floor(Math.random() * WHITE_CARDS.length)];
-        }
-
-        function getRandomBlackCard() {
-            return BLACK_CARDS[Math.floor(Math.random() * BLACK_CARDS.length)];
-        }
-
         function startNewRound() {
             gameState.phase = 'SUBMITTING';
             gameState.submittedCards = [];
             gameState.passCurrentPlayerIdx = 0;
+            gameState.lastWinner = null;
+            selectedCard = null;
 
             gameState.players.forEach((p, idx) => {
                 p.isCzar = (idx === gameState.czarIndex);
                 // Replenish hand cards
                 while (p.hand.length < 5) {
-                    p.hand.push(getRandomWhiteCard());
+                    p.hand.push(drawWhiteCard(p.hand));
                 }
             });
 
             const currentCzar = gameState.players[gameState.czarIndex];
             player.isCzar = (currentCzar.id === player.id);
+
+            if (gameState.mode !== 'PASSANDPLAY') {
+                const me = gameState.players.find(p => p.id === player.id);
+                if (me) player.hand = me.hand;
+            }
 
             gameState.blackCard = getRandomBlackCard();
 
@@ -870,7 +1295,10 @@
                 player.id = czarP.id;
                 player.name = czarP.name;
                 player.isCzar = true;
-                gameState.phase = 'JUDGING';
+                if (gameState.phase !== 'JUDGING') {
+                    gameState.phase = 'JUDGING';
+                    shuffleArray(gameState.submittedCards);
+                }
 
                 document.getElementById('pass-shield-text').innerText = `Hand the device to Card Czar (${czarP.name}) to judge!`;
                 document.getElementById('pass-shield-modal').classList.remove('hidden');
@@ -879,28 +1307,30 @@
         }
 
         function triggerBotSubmissions() {
-            if (!player.isHost) return;
+            if (!player.isHost || gameState.phase !== 'SUBMITTING') return;
 
             gameState.players.forEach(p => {
-                if (p.isBot && !p.isCzar) {
+                if (p.isBot && !p.isCzar && !gameState.submittedCards.some(s => s.playerId === p.id)) {
                     const randomHandIdx = Math.floor(Math.random() * p.hand.length);
-                    const chosen = p.hand.splice(randomHandIdx, 1)[0] || getRandomWhiteCard();
-                    p.hand.push(getRandomWhiteCard());
+                    const chosen = p.hand.splice(randomHandIdx, 1)[0] || drawWhiteCard(p.hand);
+                    p.hand.push(drawWhiteCard(p.hand));
 
-                    if (!gameState.submittedCards.some(s => s.playerId === p.id)) {
-                        gameState.submittedCards.push({
-                            playerId: p.id,
-                            cardText: chosen
-                        });
-                    }
+                    gameState.submittedCards.push({
+                        playerId: p.id,
+                        cardText: chosen
+                    });
                 }
             });
 
             checkAllSubmissions();
         }
 
+        function hasSubmitted() {
+            return (gameState.submittedCards || []).some(s => s.playerId === player.id);
+        }
+
         function selectHandCard(cardText, element) {
-            if (player.isCzar) return;
+            if (player.isCzar || gameState.phase !== 'SUBMITTING' || hasSubmitted()) return;
 
             selectedCard = cardText;
             document.querySelectorAll('.hand-card').forEach(c => c.classList.remove('selected'));
@@ -911,45 +1341,39 @@
 
         function submitSelectedCard() {
             if (!selectedCard || player.isCzar) return;
+            if (gameState.phase !== 'SUBMITTING' || hasSubmitted()) return;
 
+            const cardToPlay = selectedCard;
             document.getElementById('submit-card-btn').disabled = true;
+            selectedCard = null;
 
-            const currPlayer = gameState.players.find(p => p.id === player.id);
-            if (currPlayer) {
-                const cardIdx = currPlayer.hand.indexOf(selectedCard);
-                if (cardIdx > -1) {
+            if (gameState.mode === 'PASSANDPLAY' || player.isHost) {
+                const currPlayer = gameState.players.find(p => p.id === player.id);
+                if (currPlayer) {
+                    const cardIdx = currPlayer.hand.indexOf(cardToPlay);
+                    if (cardIdx === -1) { renderHand(); return; }
                     currPlayer.hand.splice(cardIdx, 1);
-                    currPlayer.hand.push(getRandomWhiteCard());
+                    currPlayer.hand.push(drawWhiteCard(currPlayer.hand));
+                    player.hand = currPlayer.hand;
                 }
-                player.hand = currPlayer.hand;
-            }
 
-            if (gameState.mode === 'PASSANDPLAY') {
                 gameState.submittedCards.push({
                     playerId: player.id,
-                    cardText: selectedCard
+                    cardText: cardToPlay
                 });
-                selectedCard = null;
 
-                const nonCzarCount = gameState.players.filter(p => !p.isCzar).length;
-                if (gameState.submittedCards.length >= nonCzarCount) {
-                    gameState.phase = 'JUDGING';
+                if (gameState.mode === 'PASSANDPLAY') {
+                    advancePassAndPlayTurn();
+                } else {
+                    checkAllSubmissions();
                 }
-                advancePassAndPlayTurn();
-            } else if (player.isHost) {
-                gameState.submittedCards.push({
-                    playerId: player.id,
-                    cardText: selectedCard
-                });
-                selectedCard = null;
-                checkAllSubmissions();
             } else {
+                // Client: the host validates, removes the card from the real hand and deals a new one
                 hostConn.send({
                     type: 'SUBMIT_CARD',
                     playerId: player.id,
-                    cardText: selectedCard
+                    cardText: cardToPlay
                 });
-                selectedCard = null;
             }
 
             renderHand();
@@ -958,15 +1382,25 @@
         function checkAllSubmissions() {
             if (!player.isHost) return;
 
+            if (gameState.phase !== 'SUBMITTING') {
+                broadcastGameState();
+                return;
+            }
+
+            const submittedIds = new Set(gameState.submittedCards.map(s => s.playerId));
             const nonCzarPlayers = gameState.players.filter(p => !p.isCzar);
-            if (gameState.submittedCards.length >= nonCzarPlayers.length) {
+            const allIn = nonCzarPlayers.length > 0 && nonCzarPlayers.every(p => submittedIds.has(p.id));
+
+            if (allIn) {
                 gameState.phase = 'JUDGING';
+                shuffleArray(gameState.submittedCards); // order should not reveal who played what
                 broadcastGameState();
 
                 // If Czar is a bot, auto-pick winner after delay
                 const czarP = gameState.players[gameState.czarIndex];
                 if (czarP && czarP.isBot) {
                     setTimeout(() => {
+                        if (gameState.phase !== 'JUDGING' || gameState.players[gameState.czarIndex] !== czarP) return;
                         const randomWinningSub = gameState.submittedCards[Math.floor(Math.random() * gameState.submittedCards.length)];
                         if (randomWinningSub) {
                             processWinnerSelection(randomWinningSub.playerId, randomWinningSub.cardText);
@@ -979,7 +1413,7 @@
         }
 
         function pickWinnerByCzar(winningPlayerId, cardText) {
-            if (!player.isCzar) return;
+            if (!player.isCzar || gameState.phase !== 'JUDGING') return;
 
             if (gameState.mode === 'PASSANDPLAY' || player.isHost) {
                 processWinnerSelection(winningPlayerId, cardText);
@@ -993,47 +1427,46 @@
         }
 
         function processWinnerSelection(winningPlayerId, cardText) {
+            if (gameState.phase !== 'JUDGING') return; // stops double-picks
+
+            const sub = gameState.submittedCards.find(s => s.playerId === winningPlayerId);
+            if (!sub) return;
+
             const winner = gameState.players.find(p => p.id === winningPlayerId);
             if (winner) {
                 winner.score += 1;
             }
 
+            const gameOver = !!(winner && winner.score >= gameState.targetScore && gameState.targetScore < 999);
+
             gameState.phase = 'ANNOUNCING';
+            gameState.lastWinner = {
+                name: winner ? winner.name : 'Someone',
+                question: gameState.blackCard,
+                answer: sub.cardText,
+                gameOver: gameOver
+            };
 
-            document.getElementById('modal-round-winner').classList.remove('hidden');
-            document.getElementById('winner-announcement-text').innerText = `${winner ? winner.name : 'Someone'} won this round!`;
-            document.getElementById('winning-question').innerText = gameState.blackCard;
-            document.getElementById('winning-answer').innerText = `"${cardText}"`;
-
-            if (winner && winner.score >= gameState.targetScore && gameState.targetScore < 999) {
-                document.getElementById('winner-title-text').innerText = "GAME CHAMPION!";
-                document.getElementById('winner-announcement-text').innerText = `${winner.name} IS THE ULTIMATE MALAYSIAN CAH CHAMPION!`;
-                document.getElementById('next-round-btn').innerText = "PLAY AGAIN";
-            } else {
-                document.getElementById('winner-title-text').innerText = "ROUND WINNER!";
-                document.getElementById('next-round-btn').innerText = "NEXT ROUND";
-            }
-
-            if (player.isHost) {
-                broadcastGameState();
-            }
+            // Sends the result to every client and refreshes the host screen (shows the winner popup)
+            broadcastGameState();
         }
 
         function nextRound() {
+            if (!(player.isHost || gameState.mode === 'PASSANDPLAY')) return;
+            if (gameState.phase !== 'ANNOUNCING') return;
+
             document.getElementById('modal-round-winner').classList.add('hidden');
 
-            if (player.isHost || gameState.mode === 'PASSANDPLAY') {
-                const topScore = Math.max(...gameState.players.map(p => p.score));
-                if (topScore >= gameState.targetScore && gameState.targetScore < 999) {
-                    gameState.players.forEach(p => p.score = 0);
-                    gameState.round = 1;
-                } else {
-                    gameState.round += 1;
-                }
-
-                gameState.czarIndex = (gameState.czarIndex + 1) % gameState.players.length;
-                startNewRound();
+            const topScore = Math.max(...gameState.players.map(p => p.score));
+            if (topScore >= gameState.targetScore && gameState.targetScore < 999) {
+                gameState.players.forEach(p => p.score = 0);
+                gameState.round = 1;
+            } else {
+                gameState.round += 1;
             }
+
+            gameState.czarIndex = (gameState.czarIndex + 1) % gameState.players.length;
+            startNewRound();
         }
 
         /* ==========================================================================
@@ -1044,6 +1477,35 @@
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(viewId).classList.remove('hidden');
+            if (viewId !== 'view-game') {
+                document.getElementById('modal-round-winner').classList.add('hidden');
+            }
+        }
+
+        function renderWinnerModal() {
+            const modal = document.getElementById('modal-round-winner');
+            const lw = gameState.lastWinner;
+
+            if (gameState.phase === 'ANNOUNCING' && lw) {
+                modal.classList.remove('hidden');
+                document.getElementById('winner-title-text').innerText = lw.gameOver ? 'GAME CHAMPION!' : 'ROUND WINNER!';
+                document.getElementById('winner-announcement-text').innerText = lw.gameOver
+                    ? `${lw.name} IS THE ULTIMATE MALAYSIAN CAH CHAMPION!`
+                    : `${lw.name} won this round!`;
+                document.getElementById('winning-question').innerText = lw.question;
+                document.getElementById('winning-answer').innerText = `"${lw.answer}"`;
+
+                const btn = document.getElementById('next-round-btn');
+                if (player.isHost || gameState.mode === 'PASSANDPLAY') {
+                    btn.disabled = false;
+                    btn.innerText = lw.gameOver ? 'PLAY AGAIN' : 'NEXT ROUND';
+                } else {
+                    btn.disabled = true;
+                    btn.innerText = 'WAITING FOR HOST...';
+                }
+            } else {
+                modal.classList.add('hidden');
+            }
         }
 
         function updateGameUI() {
@@ -1055,7 +1517,13 @@
 
             const statusMsg = document.getElementById('game-status-msg');
             if (gameState.phase === 'SUBMITTING') {
-                statusMsg.innerText = player.isCzar ? "YOU ARE CZAR: Waiting for answers..." : "Pick your funniest answer card!";
+                if (player.isCzar) {
+                    statusMsg.innerText = "YOU ARE CZAR: Waiting for answers...";
+                } else if (hasSubmitted()) {
+                    statusMsg.innerText = "Card submitted! Waiting for other players...";
+                } else {
+                    statusMsg.innerText = "Pick your funniest answer card!";
+                }
             } else if (gameState.phase === 'JUDGING') {
                 statusMsg.innerText = player.isCzar ? "YOU ARE CZAR: Click the winning response below!" : "Card Czar is judging responses...";
             }
@@ -1065,29 +1533,38 @@
             renderHand();
             renderSubmittedCards();
             renderScoreboard();
+            renderWinnerModal();
         }
 
         function renderHand() {
             const grid = document.getElementById('hand-cards-grid');
+            const submitBtn = document.getElementById('submit-card-btn');
             grid.innerHTML = '';
 
             if (player.isCzar) {
+                selectedCard = null;
                 grid.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-6 italic text-xs">You are the Card Czar for this round. Sit back and judge!</div>`;
-                document.getElementById('submit-card-btn').classList.add('hidden');
+                submitBtn.classList.add('hidden');
                 return;
             } else {
-                document.getElementById('submit-card-btn').classList.remove('hidden');
+                submitBtn.classList.remove('hidden');
             }
 
             const activeHand = player.hand || [];
+
+            if (gameState.phase !== 'SUBMITTING' || hasSubmitted() || (selectedCard && !activeHand.includes(selectedCard))) {
+                selectedCard = null;
+            }
+            submitBtn.disabled = !selectedCard;
 
             activeHand.forEach(cardText => {
                 const isEasterEgg = cardText.includes("gajee");
                 const card = document.createElement('div');
                 card.className = `cah-card ${isEasterEgg ? 'cah-card-easteregg' : 'cah-card-white'} hand-card cursor-pointer hover:border-black text-xs font-bold leading-snug`;
+                if (cardText === selectedCard) card.classList.add('selected');
                 card.onclick = () => selectHandCard(cardText, card);
                 card.innerHTML = `
-                    <div>${cardText}</div>
+                    <div>${escapeHtml(cardText)}</div>
                     <div class="text-[9px] text-zinc-400 border-t border-zinc-200 pt-1 mt-2 uppercase flex justify-between">
                         <span>${isEasterEgg ? 'GOLDEN EASTER EGG' : 'KUTS WHITE'}</span>
                         ${isEasterEgg ? '<i class="fas fa-star text-yellow-500"></i>' : ''}
@@ -1109,13 +1586,13 @@
                     const isEasterEgg = sub.cardText.includes("gajee");
                     const card = document.createElement('div');
                     card.className = `cah-card ${isEasterEgg ? 'cah-card-easteregg' : 'cah-card-white'} text-xs sm:text-sm font-black leading-snug ${player.isCzar ? 'cursor-pointer hover:scale-105 card-red-border' : ''}`;
-                    
+
                     if (player.isCzar && gameState.phase === 'JUDGING') {
                         card.onclick = () => pickWinnerByCzar(sub.playerId, sub.cardText);
                     }
 
                     card.innerHTML = `
-                        <div>${sub.cardText}</div>
+                        <div>${escapeHtml(sub.cardText)}</div>
                         <div class="text-[9px] text-zinc-400 border-t border-zinc-200 pt-1 mt-2 uppercase flex justify-between">
                             <span>Answer</span>
                             ${player.isCzar ? '<span class="text-red-600 font-bold">PICK THIS</span>' : ''}
@@ -1136,7 +1613,7 @@
                 const item = document.createElement('div');
                 item.className = `p-2 rounded-lg border flex justify-between items-center ${p.isCzar ? 'border-yellow-500 bg-yellow-500/10' : 'border-zinc-800 bg-black'}`;
                 item.innerHTML = `
-                    <span class="font-bold truncate text-zinc-200">${p.name} ${p.isCzar ? '<i class="fas fa-crown text-yellow-400 ml-1"></i>' : ''}</span>
+                    <span class="font-bold truncate text-zinc-200">${escapeHtml(p.name)} ${p.isCzar ? '<i class="fas fa-crown text-yellow-400 ml-1"></i>' : ''}</span>
                     <span class="font-black text-yellow-400 bg-zinc-800 px-2 py-0.5 rounded-md">${p.score} pt</span>
                 `;
                 list.appendChild(item);
@@ -1145,8 +1622,27 @@
 
         function copyRoomCode() {
             const code = document.getElementById('room-code-display').innerText;
-            navigator.clipboard.writeText(code);
-            alert('Room Code copied to clipboard: ' + code);
+
+            const fallbackCopy = () => {
+                // navigator.clipboard is blocked on plain http:// (typical LAN address), so use the old method
+                const ta = document.createElement('textarea');
+                ta.value = code;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta);
+                alert('Room Code copied to clipboard: ' + code);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(code)
+                    .then(() => alert('Room Code copied to clipboard: ' + code))
+                    .catch(fallbackCopy);
+            } else {
+                fallbackCopy();
+            }
         }
     </script>
 </body>
