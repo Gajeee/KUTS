@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KAD UNTUK TAK SIKAT | Cards Against Humanity Malaysian Edition</title>
+    <title>KAD UNTUK TAK SIHAT | Cards Against Humanity Malaysian Edition</title>
     <!-- Tailwind CSS v3 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PeerJS for WebRTC P2P Multiplayer -->
@@ -154,7 +154,7 @@
     <div id="bg-scatter" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <!-- Top Left Card -->
         <div class="bg-scatter-card bg-card-red w-44 h-64 bg-[var(--color-lemon-card)] top-[3%] left-[2%]" style="--rot-start:-15deg; --rot-mid:8deg; --rot-end:-12deg; animation-duration:22s;">
-            <div>KAD UNTUK TAK SIKAT</div>
+            <div>KAD UNTUK TAK SIHAT</div>
             <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">MALAYSIAN EDITION</div>
         </div>
 
@@ -191,12 +191,12 @@
 
     <header class="relative z-10 px-4 py-4 md:px-8 border-b border-zinc-800 flex justify-between items-center bg-black/90 backdrop-blur-md">
         <div class="flex items-center space-x-3">
-            <div class="bg-white text-black px-3 py-1 rounded-lg text-lg md:text-xl font-black tracking-tighter shadow-md">
+            <div id="kuts-logo" onclick="kutsLogoTap()" class="bg-white text-black px-3 py-1 rounded-lg text-lg md:text-xl font-black tracking-tighter shadow-md">
                 KUTS
             </div>
             <div>
                 <h1 class="text-base md:text-xl font-black tracking-tight leading-none text-white uppercase">
-                    Kad Untuk Tak Sikat
+                    Kad Untuk Tak Sihat
                 </h1>
                 <p class="text-xs text-zinc-400 font-normal">Unfiltered Malaysian CAH</p>
             </div>
@@ -380,7 +380,7 @@
                     </button>
                 </div>
                 
-                <div id="hand-cards-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                <div id="hand-cards-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                     <!-- Player hand cards -->
                 </div>
             </div>
@@ -415,6 +415,11 @@
             </div>
         </div>
 
+        <!-- RARE PICTURE QUESTION: FULLSCREEN VIEW -->
+        <div id="modal-easter-img" onclick="closeEasterImg()" class="fixed inset-0 bg-black/95 flex justify-center items-center p-4 z-[60] hidden">
+            <img id="easter-img-large" src="" alt="Mystery question" class="max-w-full max-h-full object-contain rounded-xl">
+        </div>
+
         <!-- ROUND WINNER MODAL -->
         <div id="modal-round-winner" class="fixed inset-0 bg-black/90 flex justify-center items-center p-4 z-50 hidden">
             <div class="bg-zinc-900 border-2 border-yellow-500 rounded-2xl p-6 max-w-lg w-full text-center space-y-4">
@@ -447,56 +452,231 @@
            1. MALAYSIAN CARD DATABASE (ENGLISH, MANGLISH, MALAY & 18+ SLANG)
            ========================================================================== */
         const BLACK_CARDS = [
-            "Why did the white Myvi flying over the roundabout yesterday? ____.",
+            // ---------- ORIGINAL (fixed / de-duplicated) ----------
+            "Why was the white Myvi flying over the roundabout at 3 AM? ____.",
             "Boss at Mamak order: 'Teh Tarik Kurang Manis, and add ____.'",
-            "What did JPJ find inside the Rempit motor seat during 3 AM roadblock? ____.",
+            "What did JPJ find inside the Rempit motor seat during the 3 AM roadblock? ____.",
             "The secret illegal ingredient in Ramly Burger Special is ____.",
             "Main reason why my member don't want to pay back RM50 loan: ____.",
             "What broke up the 5-year relationship at Pavilion KL? ____.",
-            "When Mak Kau Hijau gets extremely angry, she shouts ____!",
-            "During Bantuan Tunai Rahmah payout, uncle immediately went to buy ____.",
+            "During Bantuan Tunai Rahmah payout, Pak Cik immediately went to buy ____.",
             "The most dangerous thing when driving on PLUS highway at night: ____.",
-            "Why did the WeChat kid get penampar from his bapak? ____.",
-            "When Malaysian say 'Wey cibai!', it actually means ____.",
+            "Bapak gave me a penampar in front of the whole kenduri because of ____.",
+            "When Malaysians say 'Wey cibai!', it actually means ____.",
             "Two essential things inside every office pantry in KL: Nescafe and ____.",
-            "When bapak sees electricity bill RM600, he screams ____!",
+            "When bapak sees the RM600 electricity bill, he screams '____!'",
             "Why is Jalan Tun Razak jammed for 4 hours today? ____.",
             "What is the real reason why the Tomyam shop closed for 1 month? ____.",
-            "What is Uncle Muthu hiding under his sari-sari stall? ____.",
+            "What is Uncle Muthu hiding behind the counter of his kedai runcit? ____.",
             "If Malaysia conquered the world, our national anthem would be ____.",
-            "The secret to passing JPJ driving test on first try: ____.",
+            "The secret to passing the JPJ driving test on the first try: ____.",
             "What made the police officer decline the RM50 kopi money? ____.",
-            "In 2030, Bank Negara will replace Ringgit Malaysia currency with ____.",
-            "Why is the LRT suddenly stopped in the middle of track again? ____.",
+            "In 2030, Bank Negara will replace the Ringgit with ____.",
+            "Why did the LRT suddenly stop in the middle of the track again? ____.",
             "The main cause of gaduh at Pasar Malam Klang: ____.",
             "What is inside Ah Beng's modified Honda Civic bonnet? ____.",
             "The real reason the Grab driver cancelled on me: ____.",
             "Mak's WhatsApp family group just exploded because of ____.",
             "During Raya open house, Pak Long secretly hid ____ inside the rendang.",
-            "The Nasi Lemak auntie's secret ingredient is finally revealed: ____.",
+            "The Nasi Lemak auntie finally snapped at the customer who asked for ____.",
             "What is that smell coming from the office fridge? ____.",
             "Petronas' next viral ad campaign will feature ____.",
             "After the flash flood in KL, all we managed to save was ____.",
             "The wedding buffet turned into chaos because of ____.",
-            "The reason Kopitiam Uncle raised the kopi price by 50 sen: ____.",
             "I knew he was a keeper when he ordered ____ on our first date.",
             "Ah Beng's genius business idea for Pasar Malam: ____.",
-            "What makes KL traffic worse than Monday morning? ____.",
             "The Ministry of Education just added ____ to the SPM syllabus.",
             "My cousin working in Singapore keeps bragging about ____.",
-            "Why did the Mamak run out of roti canai at 10 PM? ____.",
             "The TikTok trend that finally got banned in Malaysia: ____.",
-            "The next viral drama on TV3 is all about ____.",
+            "The next TV3 drama at 7 PM is all about ____.",
             "Tourists in Kuala Lumpur should never, ever try ____.",
             "At 3 AM at the Mamak, my friend finally confessed ____.",
-            "The shopping mall's brand new mascot is ____."
+
+            // ---------- NEW: SWEARING & SHOUTING ----------
+            "The uncle at the traffic light wound down his window and screamed '____!'",
+            "Mak walked into my room, took one look at the screen, and shouted '____!'",
+            "When the referee ignored the obvious foul, the whole Mamak screamed '____!'",
+            "Bapak found my browser history and could only say '____.'",
+            "The final boss of Malaysian parenting: '____!'",
+            "Mak's slipper is already in the air and she is screaming '____!'",
+            "The most Malaysian way to start a fight: '____.'",
+            "I got a RM300 saman and my only reaction was '____!'",
+            "Asked to describe my personality in one word, I said '____.'",
+            "My boss asked for my last words before the retrenchment. I said '____.'",
+            "The road bully in the Alphard rolled down his window and shouted '____!'",
+            "The wifi died in the middle of ranked match, so I shouted '____!'",
+            "Aunty at the Deepavali open house looked at my plate and said '____.'",
+            "Mak's final warning: 'If you do ____ one more time, kena tibai!'",
+            "The tuition centre's ad says: 'Guaranteed A in SPM or ____.'",
+
+            // ---------- NEW: MALAYSIAN PROBLEMS ----------
+            "Nobody warns you that adulting in KL means ____.",
+            "PTPTN sent me an email at 2 AM about ____.",
+            "The MRT feeder bus never comes because of ____.",
+            "Touch 'n Go eWallet says 'insufficient balance' when I try to buy ____.",
+            "Grab surge pricing from KLCC to Cheras exploded because of ____.",
+            "TNB electricity bill went up because of ____.",
+            "The lift in my apartment broke down again because of ____.",
+            "AirAsia flight delayed by 8 hours because of ____.",
+            "PLUS Highway toll increased again, this time because of ____.",
+            "The taxi driver at KL Sentral quoted me RM80 for a 3 km ride. I quoted him ____.",
+            "The reason for the Malaysian brain drain: ____.",
+            "The local council fined me RM200 for ____.",
+            "The unemployment rate dropped because everyone became a Grab rider or ____.",
+            "Breaking news: the Menteri announced ____ to fix the traffic jam.",
+            "Genting cable car stopped mid-air because ____.",
+            "Our group project got an F because ____.",
+            "The Mydin uncle was fired for ____.",
+            "The HR memo says: 'Effective Monday, ____ is banned from the office.'",
+
+            // ---------- NEW: GEN Z & MALAYSIAN EVENTS ----------
+            "Concert tickets at Bukit Jalil sold out in 4 seconds because of ____.",
+            "My FYP supervisor replied to my three-month-old email with only ____.",
+            "99 Speedmart just launched a limited edition: ____.",
+            "The Shopee 9.9 cart that ruined my whole month: ____.",
+            "The real reason the Tealive queue is 90 minutes long: ____.",
+            "The Petronas Twin Towers light show now features ____.",
+            "The Harimau Malaya victory party got out of control because of ____.",
+            "MCO 2020 taught me the truth about ____.",
+            "The TikTok Live seller screams: '____!'",
+            "Instagram close friends story reveal: ____.",
+            "The Sunway Lagoon wave pool was closed after ____.",
+            "Scamming methods in 2026: pretending to be ____.",
+            "The group chat went silent the moment someone sent ____.",
+            "Cikgu disiplin confiscated ____ at the school gate.",
+            "The last text before the relationship ended: '____.'",
+
+            // ---------- NEW: CULTURE (MALAY / CHINESE / INDIAN MIX) ----------
+            "At the CNY reunion dinner, Ah Ma loudly asked me about ____.",
+            "Uncle Ramesh's wedding ended early when someone brought ____ to the reception.",
+            "Pak Cik's duit raya packet contained RM2 and ____.",
+            "The Hungry Ghost Festival got cancelled after someone burned ____ for the spirits.",
+            "Everyone at the kenduri went quiet when Tok Penghulu asked about ____.",
+            "Ah Kong at the kopitiam is arguing in Hokkien about ____.",
+            "The lion dance troupe was banned from the mall after ____.",
+            "The Tai Tai in the BMW at the wet market asked the fishmonger for ____.",
+            "The roti canai master flipped the dough and accidentally ____.",
+            "Tok Dalang's wayang kulit show tonight features a shadow puppet of ____.",
+            "Mak's shopping list for Raya: 20 kg of rice, 3 tins of biscuits, and ____.",
+            "The Raya open house buffet had rendang, lemang, and ____.",
+            "The Ipoh white coffee uncle refused to serve me because I asked for ____.",
+            "The Penang vs Ipoh food fight started with ____.",
+            "The kampung's new tourism slogan: 'Come for the durian, stay for ____.'",
+            "Guru Besar's assembly speech ended with a shocking announcement: ____.",
+
+            // ---------- NEW: FAMILY & DAILY LIFE ----------
+            "Dear Diary, today Mak found ____ in my school bag.",
+            "The Mamak's golden rule: no lepak without ordering ____.",
+            "My parents said 'Nak jadi apa?' when I told them I wanted to become ____.",
+            "I told Mak I'd be home by 10 PM but I was busy with ____.",
+            "Mak's WhatsApp status at 6 AM: '____.'",
+            "My Bapak's Kancil broke down on the highway because ____.",
+            "The aunty in the queue at Tesco loudly complained about ____.",
+            "The kopitiam auntie can read your whole life story from your order of ____.",
+            "My sister's fiance introduced himself to the family with ____.",
+            "Nobody asked, but Abang Grab gave his hot take on ____.",
+            "The uncle at Pasar Malam swears his 'ubat kuat' contains ____.",
+            "Nasi Lemak 'Grand Opening' at Bangsar: RM38 and it includes ____.",
+
+            // ---------- NEW: SPICY ----------
+            "Tinder Malaysia bio: 'Looking for someone who loves ____.'",
+            "The Jabatan Agama raid on the hotel room found ____.",
+            "The most suspicious thing found at the 'study group' at 2 AM: ____.",
+            "The Genting hotel walls are so thin that I heard ____.",
+            "Kena tangkap basah at Bukit Tunku, and the only excuse I had was ____.",
+
+            // ---------- NEW: PURE CHAOS ----------
+            "In a parallel universe where Malaysia is ruled by ____, roti canai is free.",
+            "The pontianak took one look at ____ and ran away screaming.",
+            "Scientists at UPM discovered that ____ cures homesickness.",
+            "The durian tree fell on the Alphard because of ____.",
+            "Ikan bilis got fired from the Nasi Lemak for ____.",
+            "Bomba was called to the wedding because of ____.",
+            "The kampung ghost only haunts people who dare to ____.",
+            "Ah Long's new debt collection method: ____.",
+            "Malaysia's next national dish: ____.",
+            "Never trust a Mat Salleh who says he loves ____.",
+            "Tolong! There is ____ inside my Milo Dinosaur.",
+            "Mat Rempit's grand retirement plan: ____.",
+            "If Malaysia had a Hunger Games, the weapon would be ____.",
+            "Why the Mamak uncle refuses to sell teh tarik after 3 AM: ____.",
+            "Cikgu Fizik said relativity was discovered after someone tried ____.",
+            "My last brain cell left the chat when I saw ____.",
+            "I asked for 'lemak' and got ____.",
+            "The Sarawak Laksa vs Penang Laksa debate ended when someone brought ____.",
+
+            // ---------- NEW: ROUND 2 ----------
+            "The government's new plan to solve the cost of living crisis: ____.",
+            "The reason my neighbour's Wi-Fi is faster than mine: ____.",
+            "The lorry on the Karak highway was carrying 10 tonnes of ____.",
+            "JPJ's newest rule: you cannot drive if you have ____ in the car.",
+            "The pothole on Jalan Ampang was so big it swallowed ____.",
+            "The MRT announcer's new voice line: 'Please do not bring ____ onboard.'",
+            "The reason my Touch 'n Go RFID keeps failing: ____.",
+            "The fresh grad's answer when asked about salary expectations: '____.'",
+            "The office WhatsApp group is furious about ____.",
+            "The company's new 'fun team building' involves ____.",
+            "The kopitiam uncle put up a sign: 'NO ____ ALLOWED.'",
+            "The condo management banned ____ from the swimming pool.",
+            "The Rukun Tetangga meeting turned violent because of ____.",
+            "The Shopee parcel I waited 3 weeks for turned out to be ____.",
+            "My Grab Food order arrived without ____, and I lost all faith in humanity.",
+            "The Pasar Malam uncle uses ____ to attract customers.",
+            "The only thing more expensive than a Musang King durian: ____.",
+            "Mak's reaction when I told her I got a tattoo of ____.",
+            "The kampung's Merdeka parade float this year features ____.",
+            "Bapak's Facebook post that got 3 likes and one angry aunty: '____.'",
+            "Every Malaysian cries at the Raya ad, but I cried harder because of ____.",
+            "The lecturer said the final exam would only cover ____.",
+            "The one thing every hostel student is guilty of: ____.",
+            "Gen Z's answer to 'What do you want in life?': ____.",
+            "The Maybank app crashed the moment I tried to pay for ____.",
+            "New Malaysian dating red flag: ____.",
+            "Cikgu BM asked for a sentence using the word 'mustahil': '____.'",
+            "The school canteen makcik refuses to sell ____.",
+            "At the Ramadan bazaar, I got scammed into buying ____.",
+            "Tok Wan's secret to a long life: ____.",
+            "The tourist at Jalan Alor paid RM300 for ____.",
+            "The moment I knew my friend was rich: he ordered ____ at the Mamak.",
+            "Pasar Tani uncle: 'Buy one, get one free!' but the free one is ____.",
+            "The PJ couple got divorced because of ____.",
+            "The kampung wedding was crashed by ____.",
+            "In Malaysia, you only know it's real friendship when they ____.",
+            "The bank teller looked at my account balance and said: '____.'",
+            "Ah Boy's Facebook bio: '____.'",
+            "Ah Lian shouted across the mall: '____!'",
+            "Hokkien uncle's life advice: 'Never ____.'",
+            "Tamil aunty at the wedding whispers: '____.'",
+            "My friend's first words after being dumped over WhatsApp: '____!'",
+            "What you say when someone cuts you off on the highway: '____!'",
+            "The badminton auntie lost the match and screamed '____!'",
+            "My lecturer left his Zoom mic on and everyone heard '____.'",
+            "The last words of a man who ordered 'extra pedas': '____!'",
+            "What Mak whispers to Bapak after the guests leave: '____.'",
+            "The rempit's reply to the roadblock: '____!'",
+            "Nobody expected the shy new girl to reply '____.'",
+            "Ah Long's reaction to my payment plan: '____!'",
+            "The bouncer at the KL club looked at my IC and said: '____.'",
+            "The group chat's reply to my confession: '____.'",
+            "Cikgu Disiplin's punishment for wearing the wrong shoes: ____.",
+            "The Sungai Wang escalator now plays ____ instead of music.",
+            "Mak found out about my secret and only said '____.'",
+            "The Ah Pek at the coffee shop predicted the 4D number using ____."
         ];
 
         const WHITE_CARDS = [
-            // EASTER EGG SPECIAL CARD
-            "roti canai 2 potong banjir kari ayam sambal asing - gajee",
-            
-            // 18+ & Spicy Malaysian Slang
+            // (Golden easter egg card is drawn separately - see drawWhiteCard)
+            // ---------- FRIENDS (one each) ----------
+            "Adam saying 'sekejap lagi' and meaning next Tuesday.",
+            "Aqel calling everyone 'bro', including the JPJ officer.",
+            "Fares 'just tasting' everyone's fries until the plate is empty.",
+            "Darimi telling the whole Mamak 'aku nak diet' while ordering Maggi Goreng Double Telur.",
+            "Gajee with 47 browser tabs open and RM3 in the Touch 'n Go.",
+            "Jeff somehow forgetting his wallet at the Mamak again.",
+            "Mia's 'last one, promise' Mixue order (it is the fourth).",
+            "Chong's 'confirm can, I know a guy' energy.",
+
+            // ---------- ORIGINAL 18+ & SPICY MALAYSIAN SLANG ----------
             "PUNDE!",
             "CIBAI!",
             "LANCAU!",
@@ -510,46 +690,72 @@
             "Pokai sampai makan Maggi kering.",
             "Otak udang tak ada lesen.",
 
-            // English & Manglish Classic Humor
-            "Myvi King of the Road going 190km/h on emergency lane.",
-            "Mamak ikat tepi tak nak gula but still sweet as hell.",
+            // ---------- NEW: SWEARS & INSULTS ----------
+            "Kepala bapak kau!",
+            "Bapak kau pink!",
+            "Mak kau puki!",
+            "PUKIMAK!",
+            "Chee bye, bro.",
+            "PUNDEK!",
+            "Kepala buto kau!",
+            "KOTE!",
+            "Wey konek, jangan main-main!",
+            "Bangang tahap dewa.",
+            "Bongok! Bongok! Bongok!",
+            "Kurang ajar punya budak!",
+            "Mangkuk ayun betul kau ni.",
+            "Otak udang, confirm.",
+            "Bodoh! Kau ingat aku tak tahu?",
+            "Screaming 'PUKIMAK!' at the Touch 'n Go reload machine.",
+            "Mangkuk ayun with a Class D licence.",
+            "Bangang uncle parking across three lots.",
+            "Bongok driver braking on the highway for no reason.",
+            "Pure kepala buto energy.",
+            "Mak kau hijau, bapak kau pink, and the whole family in rainbow.",
+            "Kote-level confidence with zero skill.",
+            "That one kurang ajar cousin at every kenduri.",
+            "Pundek-tier WiFi speed.",
+            "Yelling 'CIBAI!' in the middle of Tesco and feeling nothing.",
+            "'Aiyoh, you so bodoh lah!' said with love.",
+            "Calling my ex a 'sohai' in the group chat and getting kicked out.",
+            "A quiet 'lancau' whispered when the teacher asks for homework.",
+            "Muttering 'lan jiao' when the Grab driver takes the wrong exit.",
+
+            // ---------- ORIGINAL ENGLISH & MANGLISH HUMOR (fixed) ----------
+            "Myvi King of the Road going 190km/h on the emergency lane.",
+            "Teh tarik kurang manis that is still sweeter than my ex.",
             "Rempit doing Superman style on DUKE highway.",
             "Shopee delivery guy casually knocking off side mirrors.",
-            "Nasi Lemak RM1.50 with extra crispy paru.",
+            "Nasi lemak bungkus with one lonely ikan bilis.",
             "Smuggling subsidised cooking oil packets to Thailand.",
             "Drinking Ketum with warm water at 2 AM.",
             "Durian Musang King prices causing bankruptcy.",
             "Mee Goreng Basah that is somehow dry as bone.",
-            "Kopi Ais ikat tepi leaking all over new shirt.",
+            "Kopi Ais ikat tepi leaking all over my new shirt.",
             "Friend borrowing RM100 then posting IG Story partying in Bali.",
             "Polis Trafik asking for 'duit kopi extra'.",
             "Signalling right but turning left sharply.",
             "Factory bus with total brake failure.",
             "Crying over overpriced Sambal Sotong at Nasi Kandar.",
-            "Cina, Melayu, and India fighting for 1 parking spot at Pasar Malam.",
+            "Cina, Melayu and India all agreeing the parking is too expensive.",
             "Maggi Goreng Double Tambah Telur Mata Gedik.",
-            "Discipline teacher with 1-meter wooden ruler.",
-            "Saman ekor arriving in mail 6 months late.",
+            "Discipline teacher with a 1-meter wooden ruler.",
+            "Saman ekor arriving in the mail 6 months late.",
             "Roti Canai so crispy it explodes into dust.",
-            "Rich uncle in Alphard cutting Q near toll plaza.",
-            "Smell of 2T motor oil in the morning.",
-            "Ayam Goreng McD pedas gila sampai menangis.",
-            "Macau Syndicate scammer pretending to be LHDN officer.",
-            "Stealing helmet from parked EX5 motor.",
-            "Ghosting after first date at Bubble Tea shop.",
-            "Bragging about 0.5% dividend from ASB.",
-            "Driving with high beam on bright sunny afternoon.",
-            "Tiktok influencer blocking traffic for dance video.",
-            "Stuck in jam near Genting Highlands cable car.",
-            "Eating Durian with bare hands inside aircond room.",
-            "Malu Apa Bossku mentality.",
-
-            // MORE ANSWERS
+            "Rich uncle in an Alphard cutting Q near the toll plaza.",
+            "McD Ayam Goreng so pedas it makes grown men cry.",
+            "Macau Syndicate scammer pretending to be an LHDN officer.",
+            "Stealing a helmet from a parked EX5 motor.",
+            "Ghosting after the first date at the Bubble Tea shop.",
+            "Bragging about ASB dividend to people with zero savings.",
+            "Driving with high beam on a bright sunny afternoon.",
+            "TikTok influencer blocking traffic for a dance video.",
+            "Stuck in jam near the Genting Highlands cable car.",
+            "Eating Durian with bare hands inside an aircond room.",
             "Touch 'n Go balance RM0.30 at the toll gate.",
             "Auntie screaming 'Boss, kurang pedas!' then crying from the sambal.",
             "Grab driver cancelling after 20 minutes of waiting.",
             "Foodpanda rider eating my Char Kuey Teow.",
-            "Char Kuey Teow with zero cockles and zero regrets.",
             "Bringing the whole family for a 'quick' Pasar Malam trip.",
             "Nasi Kandar banjir kuah until the plate floats.",
             "Cendol so sweet the dentist sent a thank-you card.",
@@ -612,7 +818,131 @@
             "Cutting hair at the barber and getting a free 'nasihat' on life.",
             "Belanja-ing everyone at Mamak because I lost the bet.",
             "Kena tegur by Makcik for wearing shorts to the pasar.",
-            "Phone battery at 1% while waiting for the Grab pin."
+            "Phone battery at 1% while waiting for the Grab pin.",
+
+            // ---------- NEW: GEN Z MALAYSIA ----------
+            "Refreshing the ticket page for 6 hours and ending up 40,000th in the queue.",
+            "Queueing 90 minutes for a Tealive that tastes like sweet water.",
+            "The Mixue Snow King theme song stuck in my head forever.",
+            "A RM7 Zus Coffee holding my whole week together.",
+            "99 Speedmart standing 200 metres away from another 99 Speedmart.",
+            "PTPTN repayment reminder arriving at 12:01 AM.",
+            "Crying in the school hall on SPM result day.",
+            "A group chat called 'FYP Warriors' with only 2 active members.",
+            "80,000 people at Bukit Jalil sharing one working toilet.",
+            "Dalgona coffee from the MCO era making a shameful comeback.",
+            "MySejahtera still sitting on my phone like an old ex.",
+            "Sitting alone at KLCC pretending to wait for someone.",
+            "A TikTok Jalan Alor food review with 8 million views and zero hygiene.",
+            "Scam call: 'Encik, kad kredit anda ada masalah.'",
+            "Maggi cooked in a hostel rice cooker.",
+            "Sleeping through the 8 AM lecture then apologising with 'sorry cikgu, jam'.",
+            "Tapping the Touch 'n Go card on the wrong lane.",
+            "Lepak at Starbucks for 6 hours with one drink.",
+            "Wearing all black to Good Vibes Festival and passing out in the sun.",
+            "Buying concert merch that costs more than my Kancil.",
+            "Harimau Malaya scoring in the 90th minute and the whole Mamak losing it.",
+            "Selling a kidney for concert tickets.",
+            "SPayLater 'pay in 3' turning into 'pay in 30'.",
+            "Cosplaying at KL Comic Con in 38-degree heat.",
+            "Standing outside Lot 10 pretending I understand Japanese food.",
+            "Mamak QR code that says the payment expired.",
+            "RM1 price increase on teh tarik and nobody is surprised anymore.",
+            "Waiting for gaji so I can pay off Shopee PayLater.",
+            "Posting 'On my way to KLCC' with nothing in my Touch 'n Go.",
+            "A Lazada vs Shopee free shipping voucher war.",
+
+            // ---------- NEW: MALAY CULTURE & KAMPUNG ----------
+            "Mak's 'Nak jadi apa nanti?' speech, part 47.",
+            "Sambal tempoyak so strong the neighbour files a complaint.",
+            "Baju Raya that no longer fits after one week of rendang.",
+            "Auntie giving RM1 duit raya and a 20-minute lecture.",
+            "Kenduri kahwin with 3,000 guests and 3 buckets of nasi.",
+            "Rendang so tender it gets unwanted attention.",
+            "12 uncles 'mancing' at the kampung river with zero fish.",
+            "Makcik kepoh asking how much my salary is.",
+            "Bapak's ancient Kancil still working better than the government.",
+            "Kampung ghost story told with a torchlight under the chin.",
+            "Pontianak putting on tudung to blend in.",
+            "Pocong hopping down Jalan Ampang.",
+            "Air balang so sweet it should be illegal.",
+            "Sirap bandung kaw kaw with extra condensed milk.",
+            "Abang Bomba rescuing a cat from a durian tree.",
+            "Tok Wan's silat moves at the wedding.",
+            "Cousin from KL making fun of kampung Wi-Fi.",
+            "Wan's 'walking to school uphill both ways' story, told again.",
+            "Buying RM100 of groceries and getting one bag of onions.",
+            "Opening a Nasi Lemak bungkus in the middle of class.",
+
+            // ---------- NEW: CHINESE CULTURE ----------
+            "Ang pow with RM2 inside (bringing shame to the family).",
+            "Yee Sang tossing so high the ceiling fan wins.",
+            "Ah Kong's 4D numbers based on last night's dream.",
+            "Ah Ma 'sayang' with a 200-calorie cookie.",
+            "A mahjong session that ends in a family feud.",
+            "WhatsApp auntie: 'Forward to 10 people or bad luck.'",
+            "A lion dance drum loud enough to wake the dead.",
+            "Ah Beng's 'confirm can' promise.",
+            "Char siew rice uncle with zero facial expressions.",
+            "Kopitiam Hainanese uncle who calls everyone 'boss'.",
+            "Cousin asking 'how much you earn now?' in Cantonese.",
+            "Dad's 'my Kancil can beat your Ferrari' speech.",
+            "Bak Kut Teh with extra dark soy and chaos.",
+            "Mooncake price so high the moon needs a bailout.",
+            "Tai Tai flexing her Louis Vuitton at the wet market.",
+            "Ching Ming trip that ends with everyone hungry and lost.",
+
+            // ---------- NEW: INDIAN CULTURE ----------
+            "Uncle Muthu's 'macha' energy.",
+            "Murukku so crunchy it wakes up the entire neighbourhood.",
+            "Aunty's 'Aiyoo! What is this?' in three languages.",
+            "Banana leaf rice where the sambar never ends.",
+            "Roti Canai master flipping dough into the next state.",
+            "Deepavali murukku competition ending in tears.",
+            "Naan so big it needs its own seat.",
+            "Teh Tarik uncle pulling so high he needs a licence.",
+            "Thosai so thin it tears at the sight of the chutney.",
+            "Cousin's wedding with 12 costume changes and 4 hours of Bollywood.",
+            "Aunty's 'Eat more! Eat more!' hostage situation.",
+            "Chicken chettinad so spicy the fire brigade got involved.",
+            "Bro on a Yamaha 135LC blasting Tamil songs at the red light.",
+            "Uncle debating cricket with the entire kopitiam.",
+
+            // ---------- NEW: PURE CHAOS ----------
+            "A very confused orang utan in the Grab back seat.",
+            "A tapir on the Karak highway with right of way.",
+            "The Rat King of Petaling Street.",
+            "A durian falling on a Lamborghini.",
+            "Pasar Malam uncle selling a 'genuine' iPhone 17 for RM50.",
+            "Grandma's WhatsApp voice notes at 3 AM.",
+            "A Proton Saga with 12 people inside.",
+            "A Mat Salleh tourist eating sambal belacan with a spoon.",
+            "Hantu Kak Limah dancing on TikTok.",
+            "Bomba rescuing a cat from a coconut tree in a thunderstorm.",
+            "Sungai Klang turning into a fashion runway.",
+            "My ex texting 'dah makan?' after 2 years of silence.",
+            "Mak ordering Grab Food for the person sitting next to her.",
+            "Bapak learning how to use TikTok.",
+            "Mak's 'I am not angry' face.",
+            "A kopi O kosong catastrophe.",
+            "A snake in the bathroom asking for a towel.",
+            "Crying in the Proton Waja at the Petronas station.",
+            "An uncle doing tai chi in the middle of a shopping mall.",
+            "A Malaysian Boleh! T-shirt on a man who cannot even queue.",
+
+            // ---------- NEW: SPICY ----------
+            "Explaining my browser history to Mak.",
+            "Getting caught in the Myvi at Bukit Tunku.",
+            "The very thin walls of a Genting hotel room.",
+            "A Jabatan Agama surprise raid at 2 AM.",
+            "A Tinder date who turns out to be my cousin's ex.",
+            "Sending a spicy DM to the wrong Makcik.",
+            "'Netflix and chill' with Mak in the next room.",
+            "The eggplant emoji sent to the family WhatsApp group.",
+            "Awkward silence after Bapak asks 'Kau tak ada girlfriend?'",
+            "Booking a hotel room 'to study' for the fifth time this month.",
+            "'Just looking for a friend' with 47 thirst traps posted.",
+            "Slow-motion Nasi Lemak eating on Instagram Reels."
         ];
 
         /* ==========================================================================
@@ -651,6 +981,71 @@
         // Decks: draw without replacement so nobody keeps getting the same answers
         let whiteDeck = [];
         let blackDeck = [];
+
+        const HAND_SIZE = 6;
+        const GOLDEN_CHANCE = 0.015; // ~1.5% per card drawn
+        let dealingInitial = false;
+
+        // ---- RARE PICTURE QUESTION (1 in 50 rounds) ----
+        const EASTER_Q = '__GESTEREGG_IMAGE__';
+        const EASTER_Q_CHANCE = 1 / 50;
+        // Put the picture next to this HTML file. Several spellings are tried (GitHub Pages is case-sensitive).
+        const EASTER_IMG_FILES = ['gesteregg.jpeg', 'GESTEREGG.JPEG', 'gesteregg.jpg', 'GESTEREGG.JPG', 'GESTEREGG.jpeg', 'gesteregg.JPEG', 'GESTEREGG.jpg'];
+        const EASTER_ANSWERS = [
+            'OMG TQ',
+            'SERIOUS AH',
+            'GEMPAK LA AWAK NI',
+            'YOU TOO GANG',
+            'DIAM LAA BODOO',
+            'JAP AKU FOLLOW IG KAU @GAJENESS'
+        ];
+        let easterImgIdx = 0;
+        let savedHands = {};   // host only: real hands stashed during the picture round
+        let specialRound = false;
+
+        function easterImgTag(extraClass, zoomable) {
+            return `<img src="${EASTER_IMG_FILES[easterImgIdx]}" alt="Mystery question" class="${extraClass}" onerror="easterImgFail(this)" ${zoomable ? 'onclick="openEasterImg(this.src)"' : ''}>`;
+        }
+
+        function easterImgFail(img) {
+            if (easterImgIdx < EASTER_IMG_FILES.length - 1) {
+                easterImgIdx++;
+                img.src = EASTER_IMG_FILES[easterImgIdx];
+            } else {
+                const msg = document.createElement('div');
+                msg.className = 'text-sm text-zinc-400';
+                msg.innerText = 'Mystery picture not found (put gesteregg.jpeg next to the HTML file).';
+                img.replaceWith(msg);
+            }
+        }
+
+        function openEasterImg(src) {
+            document.getElementById('easter-img-large').src = src;
+            document.getElementById('modal-easter-img').classList.remove('hidden');
+        }
+
+        function closeEasterImg() {
+            document.getElementById('modal-easter-img').classList.add('hidden');
+        }
+
+        function restoreSavedHands() {
+            gameState.players.forEach(p => { if (savedHands[p.id]) p.hand = savedHands[p.id]; });
+            savedHands = {};
+            specialRound = false;
+        }
+
+        function swapInPictureRoundHands() {
+            specialRound = true;
+            gameState.players.forEach(p => {
+                savedHands[p.id] = p.hand;
+                p.hand = [...EASTER_ANSWERS];
+            });
+        }
+
+        function goldenInPlay() {
+            return gameState.players.some(p => (p.hand || []).includes(EASTER_EGG_CARD)) ||
+                   (gameState.submittedCards || []).some(s => s.cardText === EASTER_EGG_CARD);
+        }
 
         function shuffleArray(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -1010,12 +1405,17 @@
                 if (cardIdx === -1) return;
 
                 p.hand.splice(cardIdx, 1);
-                p.hand.push(drawWhiteCard(p.hand));
                 gameState.submittedCards.push({
                     playerId: p.id,
                     cardText: data.cardText
                 });
+                p.hand.push(drawWhiteCard(p.hand));
                 checkAllSubmissions();
+            } else if (data.type === 'HACK_POINT') {
+                const hp = gameState.players.find(x => x.id === data.playerId);
+                if (!hp || connections[hp.id] !== conn || !gameState.started) return;
+                hp.score += 1;
+                broadcastGameState();
             } else if (data.type === 'PICK_WINNER') {
                 const czarP = gameState.players[gameState.czarIndex];
                 if (!czarP || connections[czarP.id] !== conn) return;
@@ -1182,6 +1582,9 @@
             gameState.players.forEach(p => p.score = 0);
             whiteDeck = [];
             blackDeck = [];
+            savedHands = {};
+            specialRound = false;
+            gameState.blackCard = '';
             dealInitialCards();
             startNewRound();
         }
@@ -1195,6 +1598,17 @@
         // Draw a card that is not already in the given hand (no duplicate answers in one hand)
         function drawWhiteCard(hand) {
             hand = hand || [];
+            // Picture round: hands only ever hold the 6 special answers
+            if (specialRound) {
+                const owner = gameState.players.find(x => x.hand === hand);
+                const filler = EASTER_ANSWERS.find(a => !hand.includes(a));
+                if (owner && filler) return filler;
+            }
+            // Very rare chance to draw the golden card (humans only, only one in play at a time)
+            if (!dealingInitial && Math.random() < GOLDEN_CHANCE && !goldenInPlay()) {
+                const owner = gameState.players.find(x => x.hand === hand);
+                if (owner && !owner.isBot) return EASTER_EGG_CARD;
+            }
             for (let attempt = 0; attempt < 2; attempt++) {
                 if (whiteDeck.length === 0) refillWhiteDeck();
                 const i = whiteDeck.findIndex(c => !hand.includes(c));
@@ -1206,6 +1620,10 @@
         }
 
         function getRandomBlackCard() {
+            // Rare picture question (never twice in a row)
+            if (gameState.started && gameState.blackCard !== EASTER_Q && Math.random() < EASTER_Q_CHANCE) {
+                return EASTER_Q;
+            }
             if (blackDeck.length === 0) {
                 blackDeck = shuffleArray([...new Set(BLACK_CARDS)]);
                 // avoid showing the same question twice in a row after a reshuffle
@@ -1218,18 +1636,16 @@
 
         function dealInitialCards() {
             gameState.players.forEach(p => { p.hand = []; });
+            dealingInitial = true; // golden card can't show up in the opening hands
             gameState.players.forEach(p => {
-                // Guaranteed Easter egg card in first hand for all human players
-                if (!p.isBot) {
-                    p.hand.push(EASTER_EGG_CARD);
-                }
-                while (p.hand.length < 5) {
+                while (p.hand.length < HAND_SIZE) {
                     p.hand.push(drawWhiteCard(p.hand));
                 }
                 if (p.id === player.id) {
                     player.hand = p.hand;
                 }
             });
+            dealingInitial = false;
         }
 
         function startNewRound() {
@@ -1239,10 +1655,12 @@
             gameState.lastWinner = null;
             selectedCard = null;
 
+            restoreSavedHands(); // bring back real hands if the last round was the picture round
+
             gameState.players.forEach((p, idx) => {
                 p.isCzar = (idx === gameState.czarIndex);
                 // Replenish hand cards
-                while (p.hand.length < 5) {
+                while (p.hand.length < HAND_SIZE) {
                     p.hand.push(drawWhiteCard(p.hand));
                 }
             });
@@ -1250,12 +1668,13 @@
             const currentCzar = gameState.players[gameState.czarIndex];
             player.isCzar = (currentCzar.id === player.id);
 
+            gameState.blackCard = getRandomBlackCard();
+            if (gameState.blackCard === EASTER_Q) swapInPictureRoundHands();
+
             if (gameState.mode !== 'PASSANDPLAY') {
                 const me = gameState.players.find(p => p.id === player.id);
                 if (me) player.hand = me.hand;
             }
-
-            gameState.blackCard = getRandomBlackCard();
 
             showView('view-game');
 
@@ -1290,6 +1709,14 @@
                 document.getElementById('pass-shield-modal').classList.remove('hidden');
                 updateGameUI();
             } else {
+                // Golden card = free point, skip judging
+                const goldenSub = gameState.submittedCards.find(s => s.cardText === EASTER_EGG_CARD);
+                if (goldenSub && gameState.phase !== 'JUDGING') {
+                    gameState.phase = 'JUDGING';
+                    processWinnerSelection(goldenSub.playerId, goldenSub.cardText);
+                    return;
+                }
+
                 // All submitted, hand device to Czar to judge
                 const czarP = gameState.players[gameState.czarIndex];
                 player.id = czarP.id;
@@ -1353,14 +1780,18 @@
                     const cardIdx = currPlayer.hand.indexOf(cardToPlay);
                     if (cardIdx === -1) { renderHand(); return; }
                     currPlayer.hand.splice(cardIdx, 1);
+                    gameState.submittedCards.push({
+                        playerId: player.id,
+                        cardText: cardToPlay
+                    });
                     currPlayer.hand.push(drawWhiteCard(currPlayer.hand));
                     player.hand = currPlayer.hand;
+                } else {
+                    gameState.submittedCards.push({
+                        playerId: player.id,
+                        cardText: cardToPlay
+                    });
                 }
-
-                gameState.submittedCards.push({
-                    playerId: player.id,
-                    cardText: cardToPlay
-                });
 
                 if (gameState.mode === 'PASSANDPLAY') {
                     advancePassAndPlayTurn();
@@ -1394,6 +1825,13 @@
             if (allIn) {
                 gameState.phase = 'JUDGING';
                 shuffleArray(gameState.submittedCards); // order should not reveal who played what
+
+                // Golden card = free point, no judging needed
+                const goldenSub = gameState.submittedCards.find(s => s.cardText === EASTER_EGG_CARD);
+                if (goldenSub) {
+                    processWinnerSelection(goldenSub.playerId, goldenSub.cardText);
+                    return;
+                }
                 broadcastGameState();
 
                 // If Czar is a bot, auto-pick winner after delay
@@ -1444,6 +1882,7 @@
                 name: winner ? winner.name : 'Someone',
                 question: gameState.blackCard,
                 answer: sub.cardText,
+                golden: sub.cardText === EASTER_EGG_CARD,
                 gameOver: gameOver
             };
 
@@ -1488,11 +1927,19 @@
 
             if (gameState.phase === 'ANNOUNCING' && lw) {
                 modal.classList.remove('hidden');
-                document.getElementById('winner-title-text').innerText = lw.gameOver ? 'GAME CHAMPION!' : 'ROUND WINNER!';
+                document.getElementById('winner-title-text').innerText = lw.gameOver ? 'GAME CHAMPION!' : (lw.golden ? 'GOLDEN CARD!' : 'ROUND WINNER!');
                 document.getElementById('winner-announcement-text').innerText = lw.gameOver
                     ? `${lw.name} IS THE ULTIMATE MALAYSIAN CAH CHAMPION!`
-                    : `${lw.name} won this round!`;
-                document.getElementById('winning-question').innerText = lw.question;
+                    : (lw.golden ? `${lw.name} played the golden card: FREE POINT!` : `${lw.name} won this round!`);
+                const wq = document.getElementById('winning-question');
+                if (wq.dataset.q !== lw.question) {
+                    wq.dataset.q = lw.question;
+                    if (lw.question === EASTER_Q) {
+                        wq.innerHTML = easterImgTag('w-full max-h-56 object-contain rounded-lg', false);
+                    } else {
+                        wq.innerText = lw.question;
+                    }
+                }
                 document.getElementById('winning-answer').innerText = `"${lw.answer}"`;
 
                 const btn = document.getElementById('next-round-btn');
@@ -1508,12 +1955,25 @@
             }
         }
 
+        function renderBlackCard() {
+            const el = document.getElementById('black-card-text');
+            if (gameState.blackCard === EASTER_Q) {
+                if (el.dataset.mode !== 'img') {
+                    el.dataset.mode = 'img';
+                    el.innerHTML = easterImgTag('w-full max-h-72 object-contain rounded-lg cursor-zoom-in', true);
+                }
+            } else {
+                el.dataset.mode = 'text';
+                el.textContent = gameState.blackCard || 'Waiting...';
+            }
+        }
+
         function updateGameUI() {
             document.getElementById('round-num').innerText = gameState.round;
             const currentCzar = gameState.players.find(p => p.isCzar);
             document.getElementById('czar-name').innerText = currentCzar ? currentCzar.name : 'Unknown';
 
-            document.getElementById('black-card-text').innerText = gameState.blackCard || 'Waiting...';
+            renderBlackCard();
 
             const statusMsg = document.getElementById('game-status-msg');
             if (gameState.phase === 'SUBMITTING') {
@@ -1566,7 +2026,7 @@
                 card.innerHTML = `
                     <div>${escapeHtml(cardText)}</div>
                     <div class="text-[9px] text-zinc-400 border-t border-zinc-200 pt-1 mt-2 uppercase flex justify-between">
-                        <span>${isEasterEgg ? 'GOLDEN EASTER EGG' : 'KUTS WHITE'}</span>
+                        <span>${isEasterEgg ? 'GOLDEN - FREE POINT' : 'KUTS WHITE'}</span>
                         ${isEasterEgg ? '<i class="fas fa-star text-yellow-500"></i>' : ''}
                     </div>
                 `;
@@ -1618,6 +2078,29 @@
                 `;
                 list.appendChild(item);
             });
+        }
+
+        // Secret: tap the KUTS logo 10 times (within 3s gaps) for +1 point
+        let kutsTaps = 0;
+        let kutsTapTimer = null;
+
+        function kutsLogoTap() {
+            if (!gameState.started) return;
+            clearTimeout(kutsTapTimer);
+            kutsTapTimer = setTimeout(() => { kutsTaps = 0; }, 3000);
+            kutsTaps++;
+            if (kutsTaps < 10) return;
+            kutsTaps = 0;
+
+            if (player.isHost) {
+                const me = gameState.players.find(p => p.id === player.id);
+                if (me) {
+                    me.score += 1;
+                    broadcastGameState();
+                }
+            } else if (hostConn && hostConn.open) {
+                hostConn.send({ type: 'HACK_POINT', playerId: player.id });
+            }
         }
 
         function copyRoomCode() {
