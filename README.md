@@ -1,12 +1,10 @@
-# Kad Untuk Tak Sikat 🇲🇾
+# Kad Untuk Tak Sihat 🇲🇾
 
 **Unfiltered Malaysian Cards Against Humanity — the party game for terrible Malaysians.**
 
 A single-file, browser-based, P2P multiplayer party game inspired by Cards Against Humanity, remixed with unfiltered Manglish and Malaysian slang. No server, no install — just open the page and start playing with friends over Wi-Fi, or solo against AI bots.
 
 > ⚠️ **18+ Content Warning:** This game contains unfiltered, adult Malaysian slang and humor. Not for the faint of hati.
->
-> ⚠️BETA IS OUT STILL BUGGY V2 WILL BE OUT SOON 
 
 ## Screenshots
 
@@ -42,8 +40,7 @@ A single-file, browser-based, P2P multiplayer party game inspired by Cards Again
 
 ## Multiplayer Notes
 
-Since multiplayer uses WebRTC (PeerJS) for direct peer-to-peer connections, all players need a stable internet connection and, in some network setups (strict corporate/school firewalls), may need to be on the same network or a network that allows WebRTC traffic. game Still buggy on multiplayer but it will be fix soon and be published in itch.io
-
+Since multiplayer uses WebRTC (PeerJS) for direct peer-to-peer connections, all players need a stable internet connection and, in some network setups (strict corporate/school firewalls), may need to be on the same network or a network that allows WebRTC traffic.
 ## Credits
 
 Made by [Gajee Hub](https://gajeee.github.io/Portfolio/)
