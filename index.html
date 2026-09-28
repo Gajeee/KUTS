@@ -355,7 +355,7 @@
                         Loading question card...
                     </div>
                     <div class="flex justify-between items-center text-xs text-zinc-400 border-t border-zinc-800 pt-2 uppercase">
-                        <span>Kad Hitam</span>
+                        <span id="black-label" class="p-3 -m-3" style="-webkit-touch-callout:none;">Kad Hitam</span>
                         <span>Pick 1</span>
                     </div>
                 </div>
@@ -1000,6 +1000,7 @@
             'JAP AKU FOLLOW IG KAU @GAJENESS'
         ];
         let easterImgIdx = 0;
+        let forceEaster = false; // host only: secret trigger for the next round
         let savedHands = {};   // host only: real hands stashed during the picture round
         let specialRound = false;
 
@@ -1411,6 +1412,10 @@
                 });
                 p.hand.push(drawWhiteCard(p.hand));
                 checkAllSubmissions();
+            } else if (data.type === 'ARM_EASTER') {
+                const ap = gameState.players.find(x => x.id === data.playerId);
+                if (!ap || connections[ap.id] !== conn || !gameState.started) return;
+                forceEaster = true;
             } else if (data.type === 'HACK_POINT') {
                 const hp = gameState.players.find(x => x.id === data.playerId);
                 if (!hp || connections[hp.id] !== conn || !gameState.started) return;
@@ -1584,6 +1589,7 @@
             blackDeck = [];
             savedHands = {};
             specialRound = false;
+            forceEaster = false;
             gameState.blackCard = '';
             dealInitialCards();
             startNewRound();
@@ -1621,6 +1627,10 @@
 
         function getRandomBlackCard() {
             // Rare picture question (never twice in a row)
+            if (forceEaster) {
+                forceEaster = false;
+                return EASTER_Q;
+            }
             if (gameState.started && gameState.blackCard !== EASTER_Q && Math.random() < EASTER_Q_CHANCE) {
                 return EASTER_Q;
             }
@@ -2102,6 +2112,33 @@
                 hostConn.send({ type: 'HACK_POINT', playerId: player.id });
             }
         }
+
+        // Secret: press and hold "Kad Hitam" on the black card for 3 seconds -> next round is the picture question
+        function armPictureRound() {
+            if (!gameState.started) return;
+            if (player.isHost) {
+                forceEaster = true;
+            } else if (hostConn && hostConn.open) {
+                hostConn.send({ type: 'ARM_EASTER', playerId: player.id });
+            } else {
+                return;
+            }
+            // tiny silent confirmation: label flashes gold + short vibration
+            const lbl = document.getElementById('black-label');
+            lbl.style.color = '#d7b73b';
+            setTimeout(() => { lbl.style.color = ''; }, 400);
+            if (navigator.vibrate) navigator.vibrate(60);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lbl = document.getElementById('black-label');
+            let holdTimer = null;
+            const startHold = () => { clearTimeout(holdTimer); holdTimer = setTimeout(armPictureRound, 3000); };
+            const stopHold = () => clearTimeout(holdTimer);
+            lbl.addEventListener('pointerdown', startHold);
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lbl.addEventListener(ev, stopHold));
+            lbl.addEventListener('contextmenu', e => e.preventDefault());
+        });
 
         function copyRoomCode() {
             const code = document.getElementById('room-code-display').innerText;
