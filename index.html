@@ -109,39 +109,92 @@
             box-shadow: inset 0 0 0 4px var(--color-signal-red), 0 14px 28px rgba(254,47,47,0.5) !important;
         }
 
-        /* Premium Physical Background Playing Cards */
+        /* ---------- Living background (flat, CAH-style: no soft glows) ---------- */
+        #bg-scatter { background: #000000; }
+
+        .bg-glow, .bg-mood, .bg-grain { position: absolute; inset: 0; pointer-events: none; }
+
+        /* faint printed dot grid instead of blurry colour blobs */
+        .bg-glow {
+            background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.5px);
+            background-size: 26px 26px;
+        }
+
+        /* grain not needed on flat black */
+        .bg-grain { display: none; }
+
+        /* mood layers: hard-edged colour frames, drawn above header/footer */
+        #mood-frame {
+            /* attached to the page (body is position:relative), NOT the screen, so phone
+               address-bar resizing and scroll can't detach or tear it */
+            position: absolute; inset: 0;
+            z-index: 8; pointer-events: none;
+        } /* above header/footer (z-5), below main + modals (z-10) */
+        #mood-frame .bg-mood { position: absolute; inset: 0; box-sizing: border-box; opacity: 0; transition: opacity 0.6s ease; }
+        .mood-red { border: 6px solid var(--color-signal-red); }
+        .mood-picture { border-top: 6px solid var(--color-antique-gold); border-bottom: 6px solid var(--color-royal-violet); }
+        .mood-gold { border: 8px solid var(--color-antique-gold); }
+        #bg-scatter[data-mood="judging"] ~ #mood-frame .mood-red { opacity: 1; }
+        #bg-scatter[data-mood="picture"] ~ #mood-frame .mood-picture { opacity: 1; }
+        #bg-scatter[data-mood="gold"] ~ #mood-frame .mood-gold { opacity: 1; animation: goldPulse 1.2s steps(2, end) infinite alternate; }
+        @keyframes goldPulse { from { opacity: 0.35; } to { opacity: 1; } }
+
+        /* floating cards */
         .bg-scatter-card {
             position: absolute;
             pointer-events: none;
             border-radius: 14px;
-            padding: 1rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            font-size: 0.8rem;
             font-weight: 900;
             color: #000000;
             letter-spacing: -0.02em;
             line-height: 1.25;
-            box-shadow: inset 0 0 0 3px #000000, 0 15px 35px rgba(0, 0, 0, 0.85);
+            border: 3px solid var(--bc, #fe2f2f);
+            box-shadow: inset 0 0 0 2px var(--bc, #fe2f2f), var(--sh, 0 12px 28px rgba(0,0,0,0.8));
             animation: floatDrift 20s infinite ease-in-out alternate;
-            opacity: 0.35;
+            will-change: transform;
         }
-
-        .bg-card-red { border: 3px solid var(--color-signal-red); box-shadow: inset 0 0 0 2px var(--color-signal-red), 0 18px 40px rgba(0,0,0,0.9); }
-        .bg-card-violet { border: 3px solid var(--color-royal-violet); box-shadow: inset 0 0 0 2px var(--color-royal-violet), 0 18px 40px rgba(0,0,0,0.9); }
-        .bg-card-gold { border: 3px solid var(--color-antique-gold); box-shadow: inset 0 0 0 2px var(--color-antique-gold), 0 18px 40px rgba(0,0,0,0.9); }
+        .bg-scatter-card.bgc-dark { color: #ffffff; }
+        .bgc-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .bgc-tag {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border-top: 1px solid rgba(128,128,128,0.4);
+            padding-top: 4px;
+        }
+        .bgc-text, .bgc-tag { transition: opacity 0.5s ease; }
+        .bg-paused .bg-scatter-card { animation-play-state: paused; }
 
         @keyframes floatDrift {
-            0% {
-                transform: translate(0px, 0px) rotate(var(--rot-start, -10deg));
-            }
-            50% {
-                transform: translate(35px, -30px) rotate(var(--rot-mid, 12deg));
-            }
-            100% {
-                transform: translate(-20px, 25px) rotate(var(--rot-end, -5deg));
-            }
+            0%   { transform: translate(0px, 0px) rotate(var(--rot-start, -10deg)); }
+            50%  { transform: translate(var(--dx, 35px), var(--dy, -30px)) rotate(var(--rot-mid, 12deg)); }
+            100% { transform: translate(calc(var(--dx, 35px) * -0.6), calc(var(--dy, -30px) * -0.8)) rotate(var(--rot-end, -5deg)); }
+        }
+
+        /* confetti */
+        .confetti-piece {
+            position: fixed;
+            top: -40px;
+            pointer-events: none;
+            z-index: 55;
+            border-radius: 3px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            to { transform: translate3d(var(--cx, 0px), 112vh, 0) rotate(var(--cr, 540deg)); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-scatter-card { animation: none; }
+            #bg-scatter[data-mood="gold"] ~ #mood-frame .mood-gold { animation: none; }
         }
 
         ::-webkit-scrollbar { height: 6px; width: 6px; }
@@ -151,45 +204,20 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between relative bg-black text-white font-extrabold overflow-x-hidden">
 
-    <div id="bg-scatter" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <!-- Top Left Card -->
-        <div class="bg-scatter-card bg-card-red w-44 h-64 bg-[var(--color-lemon-card)] top-[3%] left-[2%]" style="--rot-start:-15deg; --rot-mid:8deg; --rot-end:-12deg; animation-duration:22s;">
-            <div>KAD UNTUK TAK SIHAT</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">MALAYSIAN EDITION</div>
-        </div>
-
-        <!-- Top Right Card -->
-        <div class="bg-scatter-card bg-card-violet w-48 h-68 bg-[var(--color-sky-card)] top-[12%] right-[3%]" style="--rot-start:18deg; --rot-mid:-10deg; --rot-end:15deg; animation-duration:26s; animation-delay:-4s;">
-            <div>ROTI CANAI BANJIR KARI AYAM</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">SAMBAL ASING</div>
-        </div>
-
-        <!-- Middle Left Card -->
-        <div class="bg-scatter-card bg-card-gold w-40 h-58 bg-[var(--color-bubblegum-card)] top-[40%] left-[5%]" style="--rot-start:-22deg; --rot-mid:5deg; --rot-end:-18deg; animation-duration:24s; animation-delay:-8s;">
-            <div>MAK KAU HIJAU!</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">CLASSIC SLANG</div>
-        </div>
-
-        <!-- Middle Right Card -->
-        <div class="bg-scatter-card bg-card-red w-44 h-60 bg-[var(--color-mint-card)] top-[50%] right-[6%]" style="--rot-start:12deg; --rot-mid:-16deg; --rot-end:8deg; animation-duration:28s; animation-delay:-3s;">
-            <div>PUNDE DEY!</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">UNFILTERED</div>
-        </div>
-
-        <!-- Bottom Left Card -->
-        <div class="bg-scatter-card bg-card-violet w-48 h-64 bg-[var(--color-lavender-card)] bottom-[5%] left-[8%]" style="--rot-start:-8deg; --rot-mid:14deg; --rot-end:-6deg; animation-duration:20s; animation-delay:-12s;">
-            <div>MYVI KING OF ROAD</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">HIGHWAY HERO</div>
-        </div>
-
-        <!-- Bottom Right Card -->
-        <div class="bg-scatter-card bg-card-gold w-40 h-56 bg-[var(--color-tangerine-card)] bottom-[8%] right-[12%]" style="--rot-start:20deg; --rot-mid:-12deg; --rot-end:18deg; animation-duration:25s; animation-delay:-7s;">
-            <div>CIBAI LA BRO</div>
-            <div class="text-[9px] uppercase tracking-widest border-t border-black/30 pt-1">K UTS</div>
-        </div>
+    <div id="bg-scatter" data-mood="idle" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="bg-glow"></div>
+        <div id="bg-cards"></div>
+        <div class="bg-grain"></div>
     </div>
 
-    <header class="relative z-10 px-4 py-4 md:px-8 border-b border-zinc-800 flex justify-between items-center bg-black/90 backdrop-blur-md">
+    <!-- mood frame sits above header/footer so the edges never get covered -->
+    <div id="mood-frame" aria-hidden="true">
+        <div class="bg-mood mood-red"></div>
+        <div class="bg-mood mood-picture"></div>
+        <div class="bg-mood mood-gold"></div>
+    </div>
+
+    <header class="relative z-[5] px-4 py-4 md:px-8 border-b border-zinc-800 flex justify-between items-center bg-black/90 backdrop-blur-md">
         <div class="flex items-center space-x-3">
             <div id="kuts-logo" onclick="kutsLogoTap()" class="bg-white text-black px-3 py-1 rounded-lg text-lg md:text-xl font-black tracking-tighter shadow-md">
                 KUTS
@@ -405,7 +433,7 @@
                 
                 <div>
                     <label class="block text-xs uppercase text-zinc-400 mb-1">Room Code</label>
-                    <input type="text" id="join-code-input" class="w-full bg-black border-2 border-zinc-700 rounded-full px-4 py-2.5 text-white font-black tracking-widest text-lg uppercase focus:outline-none focus:border-purple-500" placeholder="e.g. KUTS" maxlength="5">
+                    <input type="text" id="join-code-input" class="w-full bg-black border-2 border-zinc-700 rounded-full px-4 py-2.5 text-white font-black tracking-widest text-lg uppercase focus:outline-none focus:border-purple-500" placeholder="e.g. KUTS" maxlength="4">
                 </div>
 
                 <div class="flex space-x-3 pt-2">
@@ -442,7 +470,7 @@
 
     </main>
 
-    <footer class="relative z-10 py-4 text-center text-xs text-zinc-500 border-t border-zinc-900 bg-black">
+    <footer class="relative z-[5] py-4 text-center text-xs text-zinc-500 border-t border-zinc-900 bg-black">
         <p>Cards Against Humanity: Malaysian Slang Edition</p>
         <p class="mt-1"><a href="https://gajeee.github.io/Portfolio/" target="_blank" class="text-yellow-400 hover:underline font-bold">Made by Gajee Hub</a></p>
     </footer>
@@ -1965,6 +1993,148 @@
             }
         }
 
+        // ---------- LIVING BACKGROUND ----------
+        const BG_COLORS = ['--color-lemon-card', '--color-sky-card', '--color-bubblegum-card', '--color-mint-card', '--color-lavender-card', '--color-tangerine-card'];
+        const BG_BORDERS = ['--color-signal-red', '--color-royal-violet', '--color-antique-gold'];
+        // depth layers: far -> near
+        const BG_LAYERS = [
+            { scale: 0.75, font: 11,   opacity: 0.16, blur: 1.5, move: 0.5, dur: [42, 58], shadow: 'none' },
+            { scale: 0.95, font: 12.5, opacity: 0.26, blur: 0.5, move: 0.8, dur: [30, 40], shadow: '0 8px 20px rgba(0,0,0,0.7)' },
+            { scale: 1.15, font: 13.5, opacity: 0.34, blur: 0,   move: 1.1, dur: [20, 28], shadow: '0 14px 30px rgba(0,0,0,0.85)' }
+        ];
+        let lastBurstKey = '';
+
+        function bgRand(min, max) { return min + Math.random() * (max - min); }
+        function bgPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+        function bgCardText(dark) {
+            if (dark) {
+                const pool = BLACK_CARDS.filter(t => t.length <= 70 && t !== EASTER_Q);
+                return bgPick(pool);
+            }
+            const pool = WHITE_CARDS.filter(t => t.length <= 42);
+            return bgPick(pool);
+        }
+
+        function buildBackground() {
+            const wrap = document.getElementById('bg-cards');
+            if (!wrap) return;
+            const phone = window.innerWidth < 640;
+            const count = phone ? 7 : 12;
+            const sizeMul = phone ? 0.68 : 1;
+            const opMul = phone ? 0.8 : 1;
+            const cols = phone ? 2 : 4;
+            const rows = Math.ceil(count / cols);
+            // one jittered cell per card so they spread out
+            const cells = [];
+            for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) cells.push([r, c]);
+            cells.sort(() => Math.random() - 0.5);
+
+            for (let i = 0; i < count; i++) {
+                const L = BG_LAYERS[i % 3];
+                const dark = Math.random() < 0.3;
+                const [r, c] = cells[i];
+                const w = 150 * L.scale * sizeMul;
+                const h = 210 * L.scale * sizeMul;
+                const card = document.createElement('div');
+                card.className = 'bg-scatter-card' + (dark ? ' bgc-dark' : '');
+                const dx = bgRand(25, 45) * L.move * (Math.random() < 0.5 ? -1 : 1);
+                const dy = bgRand(20, 40) * L.move * (Math.random() < 0.5 ? -1 : 1);
+                card.style.cssText = [
+                    `width:${w}px`, `height:${h}px`,
+                    `top:${((r + Math.random() * 0.6) / rows) * 92}%`,
+                    `left:${((c + Math.random() * 0.6) / cols) * 90}%`,
+                    `background:${dark ? '#0a0a0a' : `var(${bgPick(BG_COLORS)})`}`,
+                    `--bc:var(${bgPick(BG_BORDERS)})`,
+                    `--sh:${L.shadow}`,
+                    `--dx:${dx}px`, `--dy:${dy}px`,
+                    `--rot-start:${bgRand(-22, 22)}deg`, `--rot-mid:${bgRand(-16, 16)}deg`, `--rot-end:${bgRand(-22, 22)}deg`,
+                    `animation-duration:${bgRand(L.dur[0], L.dur[1])}s`,
+                    `animation-delay:-${bgRand(0, 30)}s`,
+                    `opacity:${L.opacity * opMul}`,
+                    `font-size:${L.font * (phone ? 0.9 : 1)}px`,
+                    `padding:${(phone ? 0.6 : 0.85)}rem`,
+                    L.blur ? `filter:blur(${L.blur}px)` : ''
+                ].join(';');
+                card.innerHTML = `<div class="bgc-text"></div><div class="bgc-tag"></div>`;
+                bgFillCard(card, dark);
+                wrap.appendChild(card);
+            }
+        }
+
+        function bgFillCard(card, dark) {
+            card.querySelector('.bgc-text').textContent = bgCardText(dark);
+            card.querySelector('.bgc-tag').textContent = dark ? 'KUTS BLACK' : (Math.random() < 0.5 ? 'KUTS' : 'MALAYSIAN EDITION');
+        }
+
+        // every few seconds one card fades out and comes back with a new line from the real deck
+        function bgSwapRandomCard() {
+            if (document.hidden) return;
+            const cards = document.querySelectorAll('#bg-cards .bg-scatter-card');
+            if (!cards.length) return;
+            const card = cards[Math.floor(Math.random() * cards.length)];
+            const dark = card.classList.contains('bgc-dark');
+            const t = card.querySelector('.bgc-text');
+            const g = card.querySelector('.bgc-tag');
+            t.style.opacity = 0; g.style.opacity = 0;
+            setTimeout(() => {
+                bgFillCard(card, dark);
+                t.style.opacity = 1; g.style.opacity = 1;
+            }, 520);
+        }
+
+        function burstConfetti(kind) {
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const champ = kind === 'champ';
+            const n = champ ? 70 : 36;
+            const colors = champ
+                ? ['#fe2f2f', '#7b3fe4', '#d7b73b', '#ffffff', '#5ec8ff', '#7dffb0', '#ff9ac8']
+                : ['#d7b73b', '#f5d76e', '#fff2b0', '#b8922a'];
+            for (let i = 0; i < n; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                const w = bgRand(8, 15);
+                el.style.cssText = [
+                    `left:${bgRand(0, 100)}vw`,
+                    `width:${w}px`, `height:${w * 1.45}px`,
+                    `background:${bgPick(colors)}`,
+                    `--cx:${bgRand(-80, 80)}px`,
+                    `--cr:${bgRand(360, 900)}deg`,
+                    `animation-duration:${bgRand(champ ? 3 : 2, champ ? 6 : 4)}s`,
+                    `animation-delay:${bgRand(0, champ ? 1.2 : 0.6)}s`
+                ].join(';');
+                el.addEventListener('animationend', () => el.remove());
+                document.body.appendChild(el);
+            }
+        }
+
+        function updateBackgroundMood() {
+            const bg = document.getElementById('bg-scatter');
+            if (!bg) return;
+            if (!gameState.started) { bg.dataset.mood = 'idle'; return; }
+            let mood = 'idle';
+            const lw = gameState.lastWinner;
+            if (gameState.phase === 'ANNOUNCING' && lw && (lw.gameOver || lw.golden)) mood = 'gold';
+            else if (gameState.blackCard === EASTER_Q) mood = 'picture';
+            else if (gameState.phase === 'JUDGING') mood = 'judging';
+            bg.dataset.mood = mood;
+
+            if (mood !== 'gold') lastBurstKey = '';
+            const key = gameState.round + ':' + gameState.phase;
+            if (mood === 'gold' && key !== lastBurstKey) {
+                lastBurstKey = key;
+                burstConfetti(lw.gameOver ? 'champ' : 'golden');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            buildBackground();
+            setInterval(bgSwapRandomCard, 5000);
+            document.addEventListener('visibilitychange', () => {
+                document.getElementById('bg-scatter').classList.toggle('bg-paused', document.hidden);
+            });
+        });
+
         function renderBlackCard() {
             const el = document.getElementById('black-card-text');
             if (gameState.blackCard === EASTER_Q) {
@@ -2004,6 +2174,7 @@
             renderSubmittedCards();
             renderScoreboard();
             renderWinnerModal();
+            updateBackgroundMood();
         }
 
         function renderHand() {
